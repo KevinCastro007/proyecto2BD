@@ -35,7 +35,7 @@ CREATE TABLE AP_ActivityType
 )
 
 GO
-CREATE TABLE AP_Deparment
+CREATE TABLE AP_Department
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
 	Name VARCHAR(50) not null		
@@ -61,8 +61,8 @@ GO
 CREATE TABLE AP_Manager
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
-	FK_Deparment INT not null,
-	CONSTRAINT FK_Deparment FOREIGN KEY(FK_Deparment) REFERENCES AP_Deparment(ID),	
+	FK_Department INT not null,
+	CONSTRAINT FK_Department FOREIGN KEY(FK_Department) REFERENCES AP_Department(ID),	
 	Name VARCHAR(50) not null
 )
 

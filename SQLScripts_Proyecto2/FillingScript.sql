@@ -27,6 +27,16 @@ INSERT INTO dbo.AP_Property(Name) VALUES('Tierra del Viejo')
 INSERT INTO dbo.AP_Property(Name) VALUES('Hacienda del Valle')
 INSERT INTO dbo.AP_Property(Name) VALUES('Fincon Brumoso')
 
+/* - Insertion in the table Lot: AP_Lot - */
+INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(1, 'HTP1')
+INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(1, 'HTP2')
+INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(2, 'Pi00')
+INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(2, 'Pi01')
+INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(3, 'TV00')
+INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(4, 'HV01')
+INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(4, 'HV02')
+INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(5, 'FB00')
+
 
 /* - Insertion in the table Activity Type: AP_ActivityType - */
 INSERT INTO dbo.AP_ActivityType(Name) VALUES('Siembra')
@@ -52,14 +62,14 @@ INSERT INTO dbo.AP_Attendant(Name) VALUES('Hector Castro')
 INSERT INTO dbo.AP_Attendant(Name) VALUES('Juana de Arco')
 
 /* - Insertion in the table Department: AP_Department - */
-INSERT INTO dbo.AP_Deparment(Name) VALUES('Prestacion de Servicios')
-INSERT INTO dbo.AP_Deparment(Name) VALUES('Almacen de Maquinaria')
-INSERT INTO dbo.AP_Deparment(Name) VALUES('Bodegon de Suministros')
+INSERT INTO dbo.AP_Department(Name) VALUES('Prestacion de Servicios')
+INSERT INTO dbo.AP_Department(Name) VALUES('Almacen de Maquinaria')
+INSERT INTO dbo.AP_Department(Name) VALUES('Bodegon de Suministros')
 
 /* - Insertion in the table Manager: AP_Attendant - */
-INSERT INTO dbo.AP_Manager(FK_Deparment, Name) VALUES(1, 'Manuel Rosales')
-INSERT INTO dbo.AP_Manager(FK_Deparment, Name) VALUES(2, 'Bonita Manir')
-INSERT INTO dbo.AP_Manager(FK_Deparment, Name) VALUES(3, 'Gonzalo Porras')
+INSERT INTO dbo.AP_Manager(FK_Department, Name) VALUES(1, 'Manuel Rosales')
+INSERT INTO dbo.AP_Manager(FK_Department, Name) VALUES(2, 'Bonita Manir')
+INSERT INTO dbo.AP_Manager(FK_Department, Name) VALUES(3, 'Gonzalo Porras')
 
 /* - Insertion in the table Request Type: AP_RequestType - */
 INSERT INTO dbo.AP_RequestType(FK_Manager, Name) VALUES(1, 'Servicio')
