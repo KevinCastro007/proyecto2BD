@@ -1,0 +1,21 @@
+
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Historial de Actividades</h3>           
+                <p>Finca:</p>
+                <select ng-change="propertySelection()" ng-model="history.property" ng-options="property.name for property in properties" style="height: 33px; width: 250px"></select>
+                <p><br>Lote:</p>
+                <select ng-change="lotSelection()" ng-model="history.lot" ng-options="lot.code for lot in lots" style="height: 33px; width: 250px"></select>
+                <p><br>Filtro:</p>
+                <select ng-change="filterSelection()" style="height: 33px; width: 250px">
+                    <option value="2">Suministros</option>
+                    <option value="3">Maquinaria</option>
+                    <option value="4">Servicios</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#page-content-wrapper -->

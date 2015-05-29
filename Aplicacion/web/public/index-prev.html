@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="myApp" lang="es">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">	
+        <link rel="shortcut icon" href="/ico/favicon.ico">
+		<title>Mantenimiento de Tablas</title>
+	</head>
+	<body style="background-color: gray">
+		<div class="container" ng-controller="AppController">
+			<h1 class="well">Mantenimiento de Tablas</h1>
+			<table class="table">	
+				<tbody>
+					<tr>
+						<td><input type="text" class="form-control" ng-model="login.usuario" placeholder="Usuario"></td>
+						<td><input type="password" class="form-control" ng-model="login.clave" placeholder="Contraseña"></td>
+						<td><button class="btn btn-primary" ng-click="loginProfesor()">Acceder</button></td>				
+					</tr>	
+				</tbody>				
+			</table> 
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+		<script src="/controllers/login.js"></script>
+	</body>
+</html>
