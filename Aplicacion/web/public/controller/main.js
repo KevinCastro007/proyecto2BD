@@ -39,12 +39,16 @@ myApp.controller('mainController', ['$scope', '$http', function ($scope, $http) 
 //Activity Controller
 myApp.controller('activityController', ['$scope', '$http', function ($scope, $http) {
 	$scope.propertySelection = function() {
+		$scope.lots = null;
 		$http.get('/lots/' + $scope.history.property.ID).success(function (response) {
 			$scope.lots = response;
 		});	
 	}
 	$scope.lotSelection = function() {
-		alert("OKA: " + $scope.history.lot.ID);
+		$scope.cycles = null;
+		$http.get('/cycles/' + $scope.history.lot.ID).success(function (response) {
+			$scope.cycles = response;
+		});			
 	}	
 	$http.get('/properties').success(function (response) {
 		$scope.properties = response;	

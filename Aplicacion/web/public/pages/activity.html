@@ -8,12 +8,8 @@
                 <select ng-change="propertySelection()" ng-model="history.property" ng-options="property.name for property in properties" style="height: 33px; width: 250px"></select>
                 <p><br>Lote:</p>
                 <select ng-change="lotSelection()" ng-model="history.lot" ng-options="lot.code for lot in lots" style="height: 33px; width: 250px"></select>
-                <p><br>Filtro:</p>
-                <select ng-change="filterSelection()" style="height: 33px; width: 250px">
-                    <option value="2">Suministros</option>
-                    <option value="3">Maquinaria</option>
-                    <option value="4">Servicios</option>
-                </select>
+                <p><br>Ciclo:</p>
+                <select ng-change="cycleSelection()" ng-model="history.cycle" ng-options="cycle.period for cycle in cycles" style="height: 33px; width: 250px"></select>
             </div>
         </div>
     </div>

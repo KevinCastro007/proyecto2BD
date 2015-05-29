@@ -37,6 +37,25 @@ INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(4, 'HV01')
 INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(4, 'HV02')
 INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(5, 'FB00')
 
+/* - Insertion in the table Attendant: AP_Attendant - */
+INSERT INTO dbo.AP_Attendant(Name) VALUES('Josefina Porras')
+INSERT INTO dbo.AP_Attendant(Name) VALUES('Federico Diaz')
+INSERT INTO dbo.AP_Attendant(Name) VALUES('Maria Petunia')
+INSERT INTO dbo.AP_Attendant(Name) VALUES('Hector Castro')
+INSERT INTO dbo.AP_Attendant(Name) VALUES('Juana de Arco')
+
+/* - Insertion in the table Cycle: AP_Cycle - */
+INSERT INTO dbo.AP_Cycle(StartDate, EndDate) VALUES('2015-01-05', '2015-05-07')
+INSERT INTO dbo.AP_Cycle(StartDate, EndDate) VALUES('2015-06-11', '2015-11-18')
+INSERT INTO dbo.AP_Cycle(StartDate, EndDate) VALUES('2016-01-12', '2016-05-29')
+INSERT INTO dbo.AP_Cycle(StartDate, EndDate) VALUES('2016-05-30', '2016-12-17')
+INSERT INTO dbo.AP_Cycle(StartDate, EndDate) VALUES('2015-03-12', '2015-07-16')
+INSERT INTO dbo.AP_Cycle(StartDate, EndDate) VALUES('2015-08-30', '2015-12-02')
+
+/* - Insertion in the table Lot X Cycle: AP_LotXCycle - */
+INSERT INTO dbo.AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, FK_Attendant) VALUES(6, 3, 1, 3)
+INSERT INTO dbo.AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, FK_Attendant) VALUES(6, 4, 2, 1)
+INSERT INTO dbo.AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, FK_Attendant) VALUES(2, 7, 5, 2)
 
 /* - Insertion in the table Activity Type: AP_ActivityType - */
 INSERT INTO dbo.AP_ActivityType(Name) VALUES('Siembra')
@@ -54,19 +73,12 @@ INSERT INTO dbo.AP_ActivityType(Name) VALUES('Almacenar')
 INSERT INTO dbo.AP_ActivityType(Name) VALUES('Supervisar')
 INSERT INTO dbo.AP_ActivityType(Name) VALUES('Cultivar')
 
-/* - Insertion in the table Attendant: AP_Attendant - */
-INSERT INTO dbo.AP_Attendant(Name) VALUES('Josefina Porras')
-INSERT INTO dbo.AP_Attendant(Name) VALUES('Federico Diaz')
-INSERT INTO dbo.AP_Attendant(Name) VALUES('Maria Petunia')
-INSERT INTO dbo.AP_Attendant(Name) VALUES('Hector Castro')
-INSERT INTO dbo.AP_Attendant(Name) VALUES('Juana de Arco')
-
 /* - Insertion in the table Department: AP_Department - */
 INSERT INTO dbo.AP_Department(Name) VALUES('Prestacion de Servicios')
 INSERT INTO dbo.AP_Department(Name) VALUES('Almacen de Maquinaria')
 INSERT INTO dbo.AP_Department(Name) VALUES('Bodegon de Suministros')
 
-/* - Insertion in the table Manager: AP_Attendant - */
+/* - Insertion in the table Manager: AP_Manager - */
 INSERT INTO dbo.AP_Manager(FK_Department, Name) VALUES(1, 'Manuel Rosales')
 INSERT INTO dbo.AP_Manager(FK_Department, Name) VALUES(2, 'Bonita Manir')
 INSERT INTO dbo.AP_Manager(FK_Department, Name) VALUES(3, 'Gonzalo Porras')

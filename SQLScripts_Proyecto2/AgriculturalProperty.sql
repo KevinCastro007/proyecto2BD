@@ -87,9 +87,9 @@ CREATE TABLE AP_LotXCycle
 	CONSTRAINT FK_Cycle FOREIGN KEY(FK_Cycle) REFERENCES AP_Cycle(ID),	
 	FK_Attendant INT not null,
 	CONSTRAINT FK_Attendant FOREIGN KEY(FK_Attendant) REFERENCES AP_Attendant(ID),	
-	ServicesBalance FLOAT not null,
-	SuppliesBalance FLOAT not null,
-	MachineryBalance FLOAT not null
+	ServicesBalance FLOAT,
+	SuppliesBalance FLOAT,
+	MachineryBalance FLOAT
 )
 
 GO
