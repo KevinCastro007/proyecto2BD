@@ -17,7 +17,7 @@ var configuration =
 	user: 'sa',							//Nombre de Usuario de BD
 	password: '123',					//Contraseña del Usuario
 	server: 'localhost',				//Servidor de BD
-	database: 'AgriculturalProperty'			//Base de Datos (BD)
+	database: 'AgriculturalProperty'	//Base de Datos (BD)
 }
 
 //Importación de los módulos del servidor.

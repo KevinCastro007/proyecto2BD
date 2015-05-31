@@ -59,7 +59,7 @@ INSERT INTO dbo.AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, FK_Attendant) VALUES
 
 /* - Insertion in the table Activity Type: AP_ActivityType - */
 INSERT INTO dbo.AP_ActivityType(Name) VALUES('Siembra')
-INSERT INTO dbo.AP_ActivityType(Name) VALUES('Fumigación')
+INSERT INTO dbo.AP_ActivityType(Name) VALUES('Fumigacion')
 INSERT INTO dbo.AP_ActivityType(Name) VALUES('Riego')
 INSERT INTO dbo.AP_ActivityType(Name) VALUES('Cosechar')
 INSERT INTO dbo.AP_ActivityType(Name) VALUES('Deshiervar')

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" ng-app="myApp">
+<html lang="es" ng-app='myApp'>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,7 +23,7 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body ng-controller="mainController">
+    <body ng-controller='mainController'>
         <div id="wrapper">
             <!-- Sidebar -->
             <div id="sidebar-wrapper">
@@ -33,25 +33,30 @@
                             Administración de Fincas
                         </a>
                     </li>
+                    <li>
+                        <a href="#history">Historial de Actividades</a>
+                    </li>
+                    <li>
+                        <a href="#supply">Solicitud de Suministros</a>
+                    </li>
+                    <li>
+                        <a href="#machinery">Solicitud de Maquinaria</a>
+                    </li>
+                    <li>
+                        <a href="#service">Solicitud de Servicios</a>
+                    </li>
+                    <li>
+                        <a ng-click="salir()">Seleccionar otra Finca</a>
+                    </li>  
                 </ul>
             </div>
             <!-- /#sidebar-wrapper -->
 
-            <div id="page-content-wrapper">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12">       
-                            <p>Finca:</p>
-                            <select ng-change="propertySelection()" ng-model="history.property" ng-options="property.name for property in properties" style="height: 33px; width: 250px"></select>
-                            <p><br>Lote:</p>
-                            <select ng-change="lotSelection()" ng-model="history.lot" ng-options="lot.code for lot in lots" style="height: 33px; width: 250px"></select>
-                            <p><br>Ciclo:</p>
-                            <select ng-change="cycleSelection()" ng-model="history.cycle" ng-options="cycle.period for cycle in cycles" style="height: 33px; width: 250px"></select>
-                        </div>                      
-                    </div>
-                </div>
+            <!-- Page Content    -->     
+            <div id="main">  
+                <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Menu</a>
+                <div ng-view></div>
             </div>
-            <!-- /#page-content-wrapper -->
         </div>
         <!-- /#wrapper -->
 

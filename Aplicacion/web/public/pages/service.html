@@ -3,9 +3,22 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h3>Servicio</h3>
-                <p>Esta es la vista de los servicios</p>
-                <button class="btn btn-info" ng-click="message()">Super Botón</button>
+                <h3>Nueva Solicitud de Servicios</h3>
+                <p>Actividad:</p>
+                <select ng-model="serviceRequest.activity" ng-options="activity.name for activity in activities" style="height: 33px; width: 250px"></select>  
+                <p><br>Servicio:</p>
+                <select ng-model="serviceRequest.service" ng-options="service.name for service in services" style="height: 33px; width: 250px"></select>   
+                <p><br>Cantidad de horas:</p>
+                <input ng-model="serviceRequest.amount" style="height: 33px; width: 250px">
+                <p><br>Descripción:</p>
+                <input ng-model="serviceRequest.description" style="height: 33px; width: 250px">
+                <p><br>Estado de la solicitud:</p>
+                <select ng-model="serviceRequest.state" style="height: 33px; width: 250px">
+                    <option>Aprobada</option>
+                    <option>Pendiente</option>
+                </select>   
+                <br><br>
+                <button class="btn btn-info" ng-click="message()">Solicitar</button>
             </div>
         </div>
     </div>

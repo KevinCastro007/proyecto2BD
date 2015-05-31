@@ -3,14 +3,22 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h3>Suministros</h3>
-                <p>Esta es la vara de supplies</p>
-                <p>Esta es la vara de supplies</p>
-                <p>Esta es la vara de supplies</p>
-                <p>Esta es la vara de supplies</p>
-                <p>Esta es la vara de supplies</p>
-                <p>Esta es la vara de supplies</p>
-                <button class="btn btn-info" ng-click="message()">Super Botón</button>
+                <h3>Nueva Solicitud de Suministros</h3>
+                <p>Actividad:</p>
+                <select ng-model="supplyRequest.activity" ng-options="activity.name for activity in activities" style="height: 33px; width: 250px"></select>  
+                <p><br>Suministro:</p>
+                <select ng-model="supplyRequest.supply" ng-options="supply.name for supply in supplies" style="height: 33px; width: 250px"></select>   
+                <p><br>Cantidad:</p>
+                <input ng-model="supplyRequest.amount" style="height: 33px; width: 250px">
+                <p><br>Descripción:</p>
+                <input ng-model="supplyRequest.description" style="height: 33px; width: 250px">
+                <p><br>Estado de la solicitud:</p>
+                <select ng-model="supplyRequest.state" style="height: 33px; width: 250px">
+                    <option>Aprobada</option>
+                    <option>Pendiente</option>
+                </select>   
+                <br><br>
+                <button class="btn btn-info" ng-click="message()">Solicitar</button>
             </div>
         </div>
     </div>

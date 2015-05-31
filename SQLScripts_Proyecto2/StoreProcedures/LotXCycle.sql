@@ -4,7 +4,7 @@ GO
 USE AgriculturalProperty
 
 GO
--- Procudedure for inserting a LotXCycle
+-- Procedure for inserting a LotXCycle
 CREATE PROCEDURE APSP_InsertLotXCycle(@LotCode VARCHAR(50), @CropType VARCHAR(50), @CycleStartDate DATE, @CycleEndDate DATE, @Attendant VARCHAR(50))
 AS
 BEGIN
@@ -22,4 +22,13 @@ BEGIN
 	BEGIN CATCH
 		RETURN @@ERROR * -1
 	END CATCH
+END
+
+GO
+-- Procedure for returning the ID of a Lot X Cycle
+CREATE PROCEDURE APSP_LotXCycle(@FK_Lot INT, @FK_Cycle INT)
+AS
+BEGIN
+	SELECT LC.ID FROM dbo.AP_LotXCycle LC
+		WHERE LC.FK_Lot = @FK_Lot and LC.FK_Cycle = @FK_Cycle
 END
