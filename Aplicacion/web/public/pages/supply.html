@@ -11,14 +11,14 @@
                 <p><br>Cantidad:</p>
                 <input ng-model="supplyRequest.amount" style="height: 33px; width: 250px">
                 <p><br>Descripción:</p>
-                <input ng-model="supplyRequest.description" style="height: 33px; width: 250px">
-                <p><br>Estado de la solicitud:</p>
+                <textarea ng-model="supplyRequest.description" cols=32 rows=5></textarea>                 
+                <p><br>Estado de la Solicitud:</p>
                 <select ng-model="supplyRequest.state" style="height: 33px; width: 250px">
                     <option>Aprobada</option>
                     <option>Pendiente</option>
                 </select>   
                 <br><br>
-                <button class="btn btn-info" ng-click="message()">Solicitar</button>
+                <button class="btn btn-primary" ng-click="proceed()" style="height: 33px; width: 250px">Solicitar</button>
             </div>
         </div>
     </div>
