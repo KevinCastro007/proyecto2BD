@@ -17,7 +17,7 @@ function supplyStructure() {
 //Exportación del módulo correspondiente para los Suministros.
 //Parámetros desde el Servidor: app, mssql y configuration.
 module.exports = function (app, mssql, configuration) {
-	//Actividades (server get)
+	//Suministros (server get)
 	app.get('/supplies', function (request, response) {
 		//Conexión a la BD según: configuration.
 		var connection = new mssql.Connection(configuration, function (err) {

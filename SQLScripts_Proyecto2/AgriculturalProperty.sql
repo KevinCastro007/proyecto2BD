@@ -103,7 +103,7 @@ CREATE TABLE AP_Request
 	FK_RequestType INT not null,
 	CONSTRAINT FK_RequestType FOREIGN KEY(FK_RequestType) REFERENCES AP_RequestType(ID),	
 	RequestDescription VARCHAR(150) not null,
-	State INT not null
+	RequestState VARCHAR(50) not null
 )
 
 GO
@@ -175,8 +175,8 @@ GO
 CREATE TABLE AP_ServiceMovement
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
-	FK_ServiceMovement INT not null,
-	CONSTRAINT FK_ServiceMovement FOREIGN KEY(FK_ServiceMovement) REFERENCES AP_ServiceRequest(ID),	
+	FK_ServiceRequest INT not null,
+	CONSTRAINT FK_ServiceRequest FOREIGN KEY(FK_ServiceRequest) REFERENCES AP_ServiceRequest(ID),	
 	AmountHours FLOAT not null,
 	MovementDate DATETIME not null,
 	MovementDescription VARCHAR(150) not null
@@ -186,8 +186,8 @@ GO
 CREATE TABLE AP_SupplyMovement
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
-	FK_SupplyMovement INT not null,
-	CONSTRAINT FK_SupplyMovement FOREIGN KEY(FK_SupplyMovement) REFERENCES AP_SupplyRequest(ID),	
+	FK_SupplyRequest INT not null,
+	CONSTRAINT FK_SupplyRequest FOREIGN KEY(FK_SupplyRequest) REFERENCES AP_SupplyRequest(ID),	
 	Amount FLOAT not null,
 	MovementDate DATETIME not null,
 	MovementDescription VARCHAR(150) not null
@@ -196,8 +196,8 @@ GO
 CREATE TABLE AP_MachineryMovement
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
-	FK_MachineryMovement INT not null,
-	CONSTRAINT FK_MachineryMovement FOREIGN KEY(FK_MachineryMovement) REFERENCES AP_MachineryRequest(ID),	
+	FK_MachineryRequest INT not null,
+	CONSTRAINT FK_MachineryRequest FOREIGN KEY(FK_MachineryRequest) REFERENCES AP_MachineryRequest(ID),	
 	AmountHours FLOAT not null,
 	MovementDate DATETIME not null,
 	MovementDescription VARCHAR(150) not null
