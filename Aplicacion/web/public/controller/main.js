@@ -94,8 +94,12 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 			alert("Seleccione la Actividad!");
 		}		
 		else {	
-
-			alert(sharedProperties.getValue());	
+			$http.get('/historical/' + sharedProperties.getValue()).success(function (response) {
+				if (typeof(response) != 'undefined') {
+					$scope.historical = response;	
+					$scope.flag= true;
+				} 
+			});				
 		}
 	};	
 	refresh();
