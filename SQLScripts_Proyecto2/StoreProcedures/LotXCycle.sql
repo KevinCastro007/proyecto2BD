@@ -32,3 +32,13 @@ BEGIN
 	SELECT LC.ID FROM dbo.AP_LotXCycle LC
 		WHERE LC.FK_Lot = @FK_Lot and LC.FK_Cycle = @FK_Cycle
 END
+
+GO
+-- Procedure for returning the ID of a Lot X Cycle
+CREATE PROCEDURE APSP_LotXCycleAttendant(@ID INT)
+AS
+BEGIN
+	SELECT A.Name FROM dbo.AP_Attendant A
+		inner join dbo.AP_LotXCycle LC ON LC.FK_Attendant = A.ID
+		WHERE LC.ID = @ID
+END
