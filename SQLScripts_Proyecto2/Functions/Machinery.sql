@@ -16,15 +16,15 @@ BEGIN
 	RETURN @Result
 END
 
-GO
--- Function to get a specific Machinery Quantity with a Name as parameter
-CREATE FUNCTION APFN_MachineryQuantity(@Name VARCHAR(50))
-RETURNS INT
+/* - Procedure for obtain the Cost of a Machine -*/
+GO 
+CREATE FUNCTION APFN_MachineCost(@Name VARCHAR(50))
+RETURNS FLOAT
 AS
 BEGIN
-	DECLARE @Result INT
+	DECLARE @Result FLOAT
 	SET @Result = 0
-	SELECT @Result = M.Quantity FROM dbo.AP_Machinery M
+	SELECT @Result = M.Cost FROM dbo.AP_Machinery M
 		WHERE M.Name = @Name
 	RETURN @Result
 END

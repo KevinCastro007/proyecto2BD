@@ -35,7 +35,7 @@ module.exports = function (app, mssql, configuration) {
 		        	console.log("Successful execution (SP: HISTORICAL)");
 			        historical = new Array(recordsets[0].length);
 			        for (var i = 0; i < recordsets[0].length; i++) {
-			        	//JSON : Lote
+			        	//JSON : Historial
 			        	history = new historyStructure();
 			        	history.date = recordsets[0][i].ActivityDate;
 			        	history.activity = recordsets[0][i].ActivityName;

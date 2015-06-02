@@ -26,7 +26,7 @@ END
 
 GO
 -- Procedure for returning the ID of a Lot X Cycle
-CREATE PROCEDURE APSP_LotXCycle(@FK_Lot INT, @FK_Cycle INT)
+CREATE PROCEDURE APSP_LotXCycleID(@FK_Lot INT, @FK_Cycle INT)
 AS
 BEGIN
 	SELECT LC.ID FROM dbo.AP_LotXCycle LC
@@ -34,11 +34,11 @@ BEGIN
 END
 
 GO
--- Procedure for returning the ID of a Lot X Cycle
-CREATE PROCEDURE APSP_LotXCycleAttendant(@ID INT)
+-- Procedure for returning the whole information of a Lot X Cycle
+CREATE PROCEDURE APSP_LotXCycle(@ID INT)
 AS
 BEGIN
-	SELECT A.Name FROM dbo.AP_Attendant A
-		inner join dbo.AP_LotXCycle LC ON LC.FK_Attendant = A.ID
+	SELECT A.Name AS Attendant, LC.ServicesBalance, LC.SuppliesBalance, LC.MachineryBalance FROM dbo.AP_LotXCycle LC
+		inner join dbo.AP_Attendant A ON A.ID = LC.FK_Attendant
 		WHERE LC.ID = @ID
 END

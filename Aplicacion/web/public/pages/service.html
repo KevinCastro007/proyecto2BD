@@ -4,15 +4,15 @@
         <div class="row">
             <div class="col-lg-12">
                 <h3>Nueva Solicitud de Servicios</h3>
-                <p>Actividad:</p>
+                <strong><p>Actividad:</p></strong>
                 <select ng-model="serviceRequest.activity" ng-options="activity.name for activity in activities" style="height: 33px; width: 250px"></select>  
-                <p><br>Servicio:</p>
-                <select ng-model="serviceRequest.requestItem" ng-options="requestItem.name for requestItem in requestItems" style="height: 33px; width: 250px"></select>   
-                <p><br>Cantidad de Horas:</p>
+                <strong><p>Servicio:</p></strong> 
+                <select ng-model="serviceRequest.requestItem" ng-options="requestItem.name for requestItem in requestItems" style="height: 33px; width: 250px"></select>  
+                <strong><p>Cantidad de Horas:</p></strong>  
                 <input ng-model="serviceRequest.amount" style="height: 33px; width: 250px">
-                <p><br>Descripción:</p>
+                <strong><p>Descripción:</p></strong> 
                 <textarea ng-model="serviceRequest.description" cols=32 rows=5></textarea> 
-                <p><br>Estado de la Solicitud:</p>
+                <strong><p>Estado de la Solicitud:</p></strong>   
                 <select ng-model="serviceRequest.state" style="height: 33px; width: 250px">
                     <option>Aprobada</option>
                     <option>Pendiente</option>

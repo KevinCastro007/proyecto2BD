@@ -40,14 +40,15 @@
             <div id="page-content-wrapper">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-lg-12">       
-                            <p>Finca:</p>
+                        <div class="col-lg-12">            
+                            <h3>Acceso correspondiente</h3> 
+                            <strong><p>Finca:</p></strong>
                             <select ng-change="propertySelection()" ng-model="access.property" ng-options="property.name for property in properties" style="height: 33px; width: 250px"></select>
-                            <p><br>Lote:</p>
+                            <strong><p><br>Lote:</p></strong>
                             <select ng-change="lotSelection()" ng-model="access.lot" ng-options="lot.code for lot in lots" style="height: 33px; width: 250px"></select>
-                            <p><br>Ciclo:</p>
+                            <strong><p><br>Ciclo:</p></strong>
                             <select ng-change="cycleSelection()" ng-model="access.cycle" ng-options="cycle.period for cycle in cycles" style="height: 33px; width: 250px"></select>
-                        </div>                      
+                        </div>                  
                     </div>
                 </div>
             </div>

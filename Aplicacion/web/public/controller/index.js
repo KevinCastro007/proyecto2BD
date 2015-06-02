@@ -19,7 +19,7 @@ myApp.controller('mainController', function ($scope, $http) {
 	};	
 	$scope.cycleSelection = function () {
 		var IDs = [$scope.access.lot.ID, $scope.access.cycle.ID];
-		$http.get('/lotXCycle/' + IDs).success(function (response) {
+		$http.get('/lotXCycleID/' + IDs).success(function (response) {
 			window.location = "main.html?fk="+response+"&property="+$scope.access.property.name+"&lot="+$scope.access.lot.code;
 		});		
 	};		

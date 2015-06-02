@@ -3,19 +3,19 @@
     <div class="container-fluid" style="float: left">
         <div class="col-lg-12">
             <h3>Historial de Actividades</h3> 
-            <p>Rango de Fechas:</p>
+            <strong><p>Rango de Fechas:</p></strong>
             <select ng-model="historical.period" style="height: 33px; width: 250px">
                 <option value="1">Todas las fechas</option>
                 <option value="1">Rango específico</option>
             </select>
-            <p><br>Tipo de Solicitud:</p>
+            <strong><p><br>Tipo de Solicitud:</p></strong>
             <select ng-model="historical.requestsType" ng-change="requestTypeSelection()" style="height: 33px; width: 250px">
                 <option value="1">Todas las Solicitudes</option>
                 <option value="2">Suministros</option>
                 <option value="3">Maquinaria</option>
                 <option value="4">Servicios</option>
             </select>
-            <p><br>Actividad:</p>
+            <strong><p><br>Actividad:</p></strong>
             <select ng-model="historical.activity" ng-options="activity.name for activity in activities" style="height: 33px; width: 250px"></select>
             <br><br>
             <button class="btn btn-primary" ng-click="proceed()" style="height: 33px; width: 250px">Filtrar</button>

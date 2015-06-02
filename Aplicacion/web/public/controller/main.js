@@ -71,12 +71,12 @@ myApp.controller('mainController', function ($scope, $http, sharedProperties) {
 	        }   	
 	        $scope.property = get["property"];
 	        sharedProperties.setValue(parseInt(get["fk"]));
-			$http.get('/lotXCycleAttendant/' + sharedProperties.getValue()).success(function (response) {
-				console.log(response);
-				$scope.attendant = "";
-				for (i = 1; i < response.length - 1; i++) {
-					$scope.attendant += response[i];
-				}	
+			$http.get('/lotXCycle/' + sharedProperties.getValue()).success(function (response) {
+				console.log(response.attendant);
+				$scope.attendant = response.attendant;
+				$scope.suppliesBalance = response.suppliesBalance;
+				$scope.servicesBalance = response.servicesBalance;
+				$scope.machineryBalance = response.machineryBalance;				
 			});
 	    }		
 	};
@@ -139,6 +139,7 @@ myApp.controller('supplyController', function ($scope, $http, $location, sharedP
 				if (response.resultado) {
 					refresh();
 					alert("Solicitud procesada!");
+					document.location.reload();
 				}
 				else {
 					alert("Imposible realizar la Solicitud!");					
@@ -176,6 +177,7 @@ myApp.controller('machineryController', function ($scope, $http, sharedPropertie
 				if (response.resultado) {
 					refresh();
 					alert("Solicitud procesada!");
+					document.location.reload();
 				}
 				else {
 					alert("Imposible realizar la Solicitud!");					
@@ -213,6 +215,7 @@ myApp.controller('serviceController', function ($scope, $http, sharedProperties)
 				if (response.resultado) {
 					refresh();
 					alert("Solicitud procesada!");
+					document.location.reload();
 				}
 				else {
 					alert("Imposible realizar la Solicitud!");					

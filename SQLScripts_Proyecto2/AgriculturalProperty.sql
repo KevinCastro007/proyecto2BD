@@ -87,9 +87,9 @@ CREATE TABLE AP_LotXCycle
 	CONSTRAINT FK_Cycle FOREIGN KEY(FK_Cycle) REFERENCES AP_Cycle(ID),	
 	FK_Attendant INT not null,
 	CONSTRAINT FK_Attendant FOREIGN KEY(FK_Attendant) REFERENCES AP_Attendant(ID),	
-	ServicesBalance FLOAT,
-	SuppliesBalance FLOAT,
-	MachineryBalance FLOAT
+	ServicesBalance FLOAT not null,
+	SuppliesBalance FLOAT not null,
+	MachineryBalance FLOAT not null
 )
 
 GO
@@ -140,8 +140,7 @@ CREATE TABLE AP_Machinery
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,
 	Name VARCHAR(50) not null,
-	Cost FLOAT not null,
-	Quantity INT not null
+	Cost FLOAT not null
 )
 
 GO
@@ -177,7 +176,7 @@ CREATE TABLE AP_ServiceMovement
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
 	FK_ServiceRequest INT not null,
 	CONSTRAINT FK_ServiceRequest FOREIGN KEY(FK_ServiceRequest) REFERENCES AP_ServiceRequest(ID),	
-	AmountHours FLOAT not null,
+	Amount FLOAT not null,
 	MovementDate DATETIME not null,
 	MovementDescription VARCHAR(150) not null
 )
@@ -198,7 +197,7 @@ CREATE TABLE AP_MachineryMovement
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
 	FK_MachineryRequest INT not null,
 	CONSTRAINT FK_MachineryRequest FOREIGN KEY(FK_MachineryRequest) REFERENCES AP_MachineryRequest(ID),	
-	AmountHours FLOAT not null,
+	Amount FLOAT not null,
 	MovementDate DATETIME not null,
 	MovementDescription VARCHAR(150) not null
 )

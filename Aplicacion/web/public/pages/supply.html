@@ -1,18 +1,18 @@
 
 <div id="page-content-wrapper">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row">            
             <div class="col-lg-12">
                 <h3>Nueva Solicitud de Suministros</h3>
-                <p>Actividad:</p>
-                <select ng-model="supplyRequest.activity" ng-options="activity.name for activity in activities" style="height: 33px; width: 250px"></select>  
-                <p><br>Suministro:</p>
-                <select ng-model="supplyRequest.requestItem" ng-options="requestItem.name for requestItem in requestItems" style="height: 33px; width: 250px"></select>   
-                <p><br>Cantidad:</p>
+                <strong><p>Actividad:</p></strong>
+                <select ng-model="supplyRequest.activity" ng-options="activity.name for activity in activities" style="height: 33px; width: 250px"></select> 
+                <strong><p>Suministro:</p></strong> 
+                <select ng-model="supplyRequest.requestItem" ng-options="requestItem.name for requestItem in requestItems" style="height: 33px; width: 250px"></select> 
+                <strong><p>Cantidad:</p></strong>  
                 <input ng-model="supplyRequest.amount" style="height: 33px; width: 250px">
-                <p><br>Descripción:</p>
-                <textarea ng-model="supplyRequest.description" cols=32 rows=5></textarea>                 
-                <p><br>Estado de la Solicitud:</p>
+                <strong><p>Descripción:</p></strong> 
+                <textarea ng-model="supplyRequest.description" cols=32 rows=5></textarea>  
+                <strong><p>Estado de la Solicitud:</p></strong>   
                 <select ng-model="supplyRequest.state" style="height: 33px; width: 250px">
                     <option>Aprobada</option>
                     <option>Pendiente</option>
@@ -20,6 +20,7 @@
                 <br><br>
                 <button class="btn btn-primary" ng-click="proceed()" style="height: 33px; width: 250px">Solicitar</button>
             </div>
+            </strong>
         </div>
     </div>
 </div>
