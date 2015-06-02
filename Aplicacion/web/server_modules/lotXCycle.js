@@ -19,4 +19,18 @@ module.exports = function (app, mssql, configuration) {
 		    });   
 		});		
 	});
+	app.get('/lotXCycleAttendant/:lotXCycleID', function (request, response) {	
+		var lotXCycleID = request.params.lotXCycleID;
+		//Conexión a la BD según: configuration.
+		var connection = new mssql.Connection(configuration, function (err) {
+			//Request de la Conexión.
+		    var request = new mssql.Request(connection);
+		    //Ejecución del Store Procedure (SP).
+		    request.input('ID', mssql.Int, lotXCycleID);
+		    request.execute('dbo.APSP_LotXCycleAttendant', function (err, recordsets, returnValue) {
+		        //Respuesta (Array : JSON)	
+				response.json(recordsets[0][0].Name);	
+		    });   
+		});		
+	});
 };

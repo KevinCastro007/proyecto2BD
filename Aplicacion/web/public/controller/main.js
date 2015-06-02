@@ -71,6 +71,13 @@ myApp.controller('mainController', function ($scope, $http, sharedProperties) {
 	        }   	
 	        $scope.property = get["property"];
 	        sharedProperties.setValue(parseInt(get["fk"]));
+			$http.get('/lotXCycleAttendant/' + sharedProperties.getValue()).success(function (response) {
+				console.log(response);
+				$scope.attendant = "";
+				for (i = 1; i < response.length - 1; i++) {
+					$scope.attendant += response[i];
+				}	
+			});
 	    }		
 	};
 });
