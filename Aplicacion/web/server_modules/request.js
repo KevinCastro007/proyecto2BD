@@ -7,10 +7,9 @@ module.exports = function (app, mssql, configuration) {
 		//Parseo de datos del Request.
 		var lotXCycleID = request.params.lotXCycleID;
 		var activityID = request.body.activity.ID;
-		var requestType = request.body.requestType;
-		var requestItem = request.body.requestItem.name;
+		var requestType = request.body.type;
+		var requestItem = request.body.item.name;
 		var amount = request.body.amount;
-		var description = request.body.description;
 		var state = request.body.state;
 		//Conexión a la BD según: configuration.
 		var connection = new mssql.Connection(configuration, function (err) {
@@ -20,7 +19,6 @@ module.exports = function (app, mssql, configuration) {
 		    request.input('FK_ActivityType', mssql.Int, activityID);
 		    request.input('RequestType', mssql.VarChar(50), requestType);
 		    request.input('Request', mssql.VarChar(50), requestItem);
-		    request.input('Description', mssql.VarChar(150), description);
 		    request.input('Amount', mssql.Float, amount);
 		    request.input('State', mssql.VarChar(50), state);
 		    //Ejecución del Store Procedure (SP).

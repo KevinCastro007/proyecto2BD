@@ -4,7 +4,7 @@ GO
 USE AgriculturalProperty
 
 GO
-CREATE PROCEDURE APSP_InsertRequest(@FK_LotXCycle INT,  @FK_ActivityType INT, @RequestType VARCHAR(50), @Description VARCHAR(50), @Request VARCHAR(50), @Amount FLOAT, @State VARCHAR(50))
+CREATE PROCEDURE APSP_InsertRequest(@FK_LotXCycle INT,  @FK_ActivityType INT, @RequestType VARCHAR(50), @Request VARCHAR(50), @Amount FLOAT, @State VARCHAR(50))
 AS
 BEGIN
 	BEGIN TRY
@@ -16,8 +16,9 @@ BEGIN
 				IF (dbo.APFN_ServiceID(@Request) <> 0)
 				BEGIN	
 					DECLARE @ServiceRequestDescription VARCHAR(150), @ServiceHistoricalDescription VARCHAR(150)
-					SELECT @ServiceRequestDescription = @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s). COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
-						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) +'.'+ CONVERT(VARCHAR(10), dbo.APFN_ServiceID(@Request))  +'.'+ CONVERT(VARCHAR(10), MAX(SR.ID) + 1)
+					SELECT @ServiceRequestDescription =  'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
+						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_ServiceID(@Request))  + CONVERT(VARCHAR(10), ISNULL(MAX(SR.ID), 0) + 1) 
+						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 						FROM dbo.AP_ServiceRequest SR
 					SET @ServiceHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + ': ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 					IF (@State = 'Aprobada')
@@ -42,7 +43,6 @@ BEGIN
 								FROM dbo.AP_LotXCycle LC 
 								WHERE LC.ID = @FK_LotXCycle
 						COMMIT
-						RETURN 1
 					END
 					IF (@State = 'Pendiente')
 					BEGIN
@@ -56,8 +56,8 @@ BEGIN
 							INSERT INTO dbo.AP_ServiceRequest(ID, FK_Service, AmountHours) 
 								VALUES(@RequestID, dbo.APFN_ServiceID(@Request), @Amount)
 						COMMIT
-						RETURN 1
 					END
+					RETURN 1
 				END
 				ELSE
 					RETURN 0
@@ -67,15 +67,16 @@ BEGIN
 				IF (dbo.APFN_SupplyQuantity(@Request) - @Amount >= 0)
 				BEGIN
 					DECLARE @SupplyRequestDescription VARCHAR(150), @SupplyHistoricalDescription VARCHAR(150)
-					SELECT @SupplyRequestDescription = @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '. COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
-						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) +'.'+ CONVERT(VARCHAR(10), dbo.APFN_SupplyID(@Request))  +'.'+ CONVERT(VARCHAR(10), MAX(SR.ID) + 1)
+					SELECT @SupplyRequestDescription = 'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
+						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_SupplyID(@Request))  + CONVERT(VARCHAR(10),  ISNULL(MAX(SR.ID), 0) + 1) 
+						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '.' 
 						FROM dbo.AP_SupplyRequest SR
 					SET @SupplyHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + ': ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '.'
 					IF (@State = 'Aprobada')
 					BEGIN
 						DECLARE @SupplyMovementDescription VARCHAR(150)
 						SELECT @SupplyMovementDescription = 'Fecha de proceso: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '. Nuevo saldo de suministros: ' 
-							+ CONVERT(VARCHAR(200), (LC.SupplyBalance + dbo.APFN_SupplyCost(@Request) * @Amount))
+							+ CONVERT(VARCHAR(200), (LC.SuppliesBalance + dbo.APFN_SupplyCost(@Request) * @Amount))
 							FROM dbo.AP_LotXCycle LC 
 							WHERE LC.ID = @FK_LotXCycle
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
@@ -96,7 +97,6 @@ BEGIN
 								FROM dbo.AP_LotXCycle LC 
 								WHERE LC.ID = @FK_LotXCycle
 						COMMIT
-						RETURN 1
 					END
 					IF (@State = 'Pendiente')
 					BEGIN
@@ -110,8 +110,8 @@ BEGIN
 							INSERT INTO dbo.AP_SupplyRequest(ID, FK_Supply, Amount) 
 								VALUES(@RequestID, dbo.APFN_SupplyID(@Request), @Amount)
 						COMMIT
-						RETURN 1
 					END
+					RETURN 1
 				END
 				ELSE
 					RETURN 0
@@ -121,8 +121,9 @@ BEGIN
 				IF (dbo.APFN_MachineryID(@Request) <> 0)
 				BEGIN
 					DECLARE @MachineryRequestDescription VARCHAR(150), @MachineryHistoricalDescription VARCHAR(150)
-					SELECT @MachineryRequestDescription = @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s). COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
-						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) +'.'+ CONVERT(VARCHAR(10), dbo.APFN_MachineryID(@Request))  +'.'+ CONVERT(VARCHAR(10), MAX(MR.ID) + 1)
+					SELECT @MachineryRequestDescription = 'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
+						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_MachineryID(@Request))  + CONVERT(VARCHAR(10),  ISNULL(MAX(MR.ID), 0) + 1)
+						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 						FROM dbo.AP_MachineryRequest MR
 					SET @MachineryHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + ': ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 					IF (@State = 'Aprobada')
@@ -147,7 +148,6 @@ BEGIN
 								FROM dbo.AP_LotXCycle LC 
 								WHERE LC.ID = @FK_LotXCycle
 						COMMIT
-						RETURN 1
 					END
 					IF (@State = 'Pendiente')
 					BEGIN
@@ -160,9 +160,9 @@ BEGIN
 								VALUES(@FK_ActivityType, @RequestID, GETDATE(), @MachineryHistoricalDescription)					
 							INSERT INTO dbo.AP_MachineryRequest(ID, FK_Machinery, AmountHours) 
 								VALUES(@RequestID, dbo.APFN_MachineryID(@Request), @Amount)
-						COMMIT
-						RETURN 1					
+						COMMIT				
 					END
+					RETURN 1	
 				END
 				ELSE
 					RETURN 0	

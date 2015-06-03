@@ -25,6 +25,10 @@ myApp.config(function ($routeProvider) {
 			templateUrl : '../pages/service.html',
 			controller 	: 'serviceController'
 		})
+		.when('/request', {
+			templateUrl : '../pages/request.html',
+			controller 	: 'requestController'
+		})
 		.otherwise({
 			redirectTo : '/'
 		});
@@ -72,7 +76,6 @@ myApp.controller('mainController', function ($scope, $http, sharedProperties) {
 	        $scope.property = get["property"];
 	        sharedProperties.setValue(parseInt(get["fk"]));
 			$http.get('/lotXCycle/' + sharedProperties.getValue()).success(function (response) {
-				console.log(response.attendant);
 				$scope.attendant = response.attendant;
 				$scope.suppliesBalance = response.suppliesBalance;
 				$scope.servicesBalance = response.servicesBalance;
@@ -88,130 +91,70 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 		$http.get('/activities').success(function (response) {
 			$scope.activities = response;	
 		});	
+		$http.get('/historicalDates/' + sharedProperties.getValue()).success(function (response) {
+			$scope.periods = response;	
+		});			
 		$scope.historical = "";		
 	};	
 	$scope.proceed = function () {
-		if (typeof($scope.historical.period) === 'undefined') {
-			alert("Seleccione el Rango de Fechas!");
-		}
-		else if (typeof($scope.historical.requestsType) === 'undefined') {
-			alert("Seleccione el Tipo de Solicitud!");
-		}	
-		else if (typeof($scope.historical.activity) === 'undefined') {
-			alert("Seleccione la Actividad!");
-		}		
-		else {	
-			$http.get('/historical/' + sharedProperties.getValue()).success(function (response) {
-				if (typeof(response) != 'undefined') {
-					$scope.historical = response;	
-					$scope.flag= true;
-				} 
-			});				
-		}
+		console.log($scope.historical);
+		$http.post('/historical/' + sharedProperties.getValue(), $scope.historical).success(function (response) {
+			if (typeof(response) != 'undefined') {
+				console.log(response);
+				$scope.histories = response;	
+				$scope.flag = true;
+			} 
+		});
 	};	
 	refresh();
 });
 
-//Supply Controller
-myApp.controller('supplyController', function ($scope, $http, $location, sharedProperties) {	
+//Request Controller
+myApp.controller('requestController', function ($scope, $http, sharedProperties) {	
 	var refresh = function () {
-		$http.get('/supplies').success(function (response) {
-			$scope.requestItems = response;	
-		});	
 		$http.get('/activities').success(function (response) {
 			$scope.activities = response;	
 		});	
-		$scope.supplyRequest = "";		
+		$scope.request = "";		
 	};
-	$scope.proceed = function () {
-		if (typeof($scope.supplyRequest.activity) === 'undefined') {
-			alert("Seleccione la Actividad!");
-		}
-		else if (typeof($scope.supplyRequest.requestItem) === 'undefined') {
-			alert("Seleccione el Suministro!");
-		}	
-		else if (typeof($scope.supplyRequest.state) === 'undefined') {
-			alert("Seleccione el Estado!");
-		}		
-		else {		
-			$scope.supplyRequest.requestType = 'Suministro';
-			$http.put('/request/' + sharedProperties.getValue(), $scope.supplyRequest).success(function (response) {
-				if (response.resultado) {
-					refresh();
-					alert("Solicitud procesada!");
-					document.location.reload();
-				}
-				else {
-					alert("Imposible realizar la Solicitud!");					
-				}		
-			});	
-		}
-	};
-	refresh();
-});
-
-//Machinery Controller
-myApp.controller('machineryController', function ($scope, $http, sharedProperties) {	
-	var refresh = function () {
-		$http.get('/machinery').success(function (response) {
-			$scope.requestItems = response;	
-		});	
-		$http.get('/activities').success(function (response) {
-			$scope.activities = response;	
-		});	
-		$scope.machineryRequest = "";		
-	};
-	$scope.proceed = function () {
-		if (typeof($scope.machineryRequest.activity) === 'undefined') {
-			alert("Seleccione la Actividad!");
-		}
-		else if (typeof($scope.machineryRequest.requestItem) === 'undefined') {
-			alert("Seleccione la Máquina!");
-		}	
-		else if (typeof($scope.machineryRequest.state) === 'undefined') {
-			alert("Seleccione el Estado!");
-		}		
-		else {	
-			$scope.machineryRequest.requestType = 'Maquinaria';	
-			$http.put('/request/' + sharedProperties.getValue(), $scope.machineryRequest).success(function (response) {
-				if (response.resultado) {
-					refresh();
-					alert("Solicitud procesada!");
-					document.location.reload();
-				}
-				else {
-					alert("Imposible realizar la Solicitud!");					
-				}		
+	$scope.typeSelection = function () {
+		console.log($scope.request.type);
+		if ($scope.request.type == 'Suministro') {
+			$http.get('/supplies').success(function (response) {
+				$scope.item = "Suministro:";
+				$scope.items = response;	
 			});		
 		}
-	};
-	refresh();
-});
-
-//Service Controller
-myApp.controller('serviceController', function ($scope, $http, sharedProperties) {	
-	var refresh = function () {
-		$http.get('/services').success(function (response) {
-			$scope.requestItems = response;	
-		});	
-		$http.get('/activities').success(function (response) {
-			$scope.activities = response;	
-		});	
-		$scope.serviceRequest = "";		
+		else if ($scope.request.type == 'Servicio') {
+			$http.get('/services').success(function (response) {
+				$scope.item = "Servicio:";
+				$scope.amount = " de Horas";
+				$scope.items = response;	
+			});				
+		}
+		else if ($scope.request.type == 'Maquinaria') {
+			$http.get('/machinery').success(function (response) {
+				$scope.item = "Maquinaria:";
+				$scope.amount = " de Horas";
+				$scope.items = response;	
+			});					
+		}
 	};
 	$scope.proceed = function () {
-		if (typeof($scope.serviceRequest.activity) === 'undefined') {
+		if (typeof($scope.request.type) === 'undefined') {
+			alert("Seleccione el Tipo!");
+		}
+		else if (typeof($scope.request.activity) === 'undefined') {
 			alert("Seleccione la Actividad!");
 		}
-		else if (typeof($scope.serviceRequest.requestItem) === 'undefined') {
+		else if (typeof($scope.request.item) === 'undefined') {
 			alert("Seleccione el Servicio!");
 		}	
-		else if (typeof($scope.serviceRequest.state) === 'undefined') {
+		else if (typeof($scope.request.state) === 'undefined') {
 			alert("Seleccione el Estado!");
 		}		
 		else {	
-			$scope.serviceRequest.requestType = 'Servicio';	
-			$http.put('/request/' + sharedProperties.getValue(), $scope.serviceRequest).success(function (response) {
+			$http.put('/request/' + sharedProperties.getValue(), $scope.request).success(function (response) {
 				if (response.resultado) {
 					refresh();
 					alert("Solicitud procesada!");

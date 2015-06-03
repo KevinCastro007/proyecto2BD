@@ -114,7 +114,7 @@ CREATE TABLE AP_HistoricalActivity
 	CONSTRAINT FK_ActivityType FOREIGN KEY(FK_ActivityType) REFERENCES AP_ActivityType(ID),	
 	FK_Request INT not null,
 	CONSTRAINT FK_Request FOREIGN KEY(FK_Request) REFERENCES AP_Request(ID),	
-	ActivityDate DATETIME not null,
+	ActivityDate DATE not null,
 	ActivityDescription VARCHAR(150) not null
 )
 

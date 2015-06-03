@@ -21,16 +21,25 @@ function historyStructure() {
 //Parámetros desde el Servidor: app, mssql y configuration.
 module.exports = function (app, mssql, configuration) {
 	//Historiales (server get)
-	app.get('/historical/:lotXCycleID', function (request, response) {	
+	app.post('/historical/:lotXCycleID', function (request, response) {	
 		var lotXCycleID = request.params.lotXCycleID;
+		var start = typeof(request.body.start) == 'undefined' ? null :  request.body.start.date;
+		var end = typeof(request.body.end) == 'undefined' ? null :  request.body.end.date;
+		var requestType = typeof(request.body.requestType) == 'undefined' ? null :  request.body.requestType;
+		var activity = typeof(request.body.activity) == 'undefined' ? null :  request.body.activity.name;
 		//Conexión a la BD según: configuration.
 		var connection = new mssql.Connection(configuration, function (err) {
 			//Request de la Conexión.
 		    var request = new mssql.Request(connection);
 		    request.input('FK_LotXCycle', mssql.Int, lotXCycleID);
+		    request.input('ActivityType', mssql.VarChar(50), activity);
+		    request.input('Start', mssql.Date, start);
+		    request.input('End', mssql.Date, end);
+		    request.input('RequestType', mssql.VarChar(50), requestType);
 		    //Ejecución del Store Procedure (SP).
 		    request.execute('dbo.APSP_Historical', function (err, recordsets, returnValue) {
-		        //Inicialización del Array Respuesta.  		
+		        //Inicialización del Array Respuesta.  	
+		        //console.log(recordsets[0]);
 		        if (typeof(recordsets[0]) != 'undefined') {
 		        	console.log("Successful execution (SP: HISTORICAL)");
 			        historical = new Array(recordsets[0].length);
@@ -49,6 +58,35 @@ module.exports = function (app, mssql, configuration) {
 			        };	
 					//Respuesta (Array : JSON)
 					response.json(historical);		        	
+		        }
+		        else {
+		        	response.json(undefined);		
+		        }
+		    }); 
+		});		
+	});
+
+	//Historiales (server get)
+	app.get('/historicalDates/:lotXCycleID', function (request, response) {	
+		var lotXCycleID = request.params.lotXCycleID;
+		//Conexión a la BD según: configuration.
+		var connection = new mssql.Connection(configuration, function (err) {
+			//Request de la Conexión.
+		    var request = new mssql.Request(connection);
+		    request.input('FK_LotXCycle', mssql.Int, lotXCycleID);
+		    //Ejecución del Store Procedure (SP).
+		    request.execute('dbo.APSP_HistoricalDates', function (err, recordsets, returnValue) {
+		        //Inicialización del Array Respuesta.  		
+		        if (typeof(recordsets[0]) != 'undefined') {
+			        var periods = new Array(recordsets[0].length);
+			        for (var i = 0; i < recordsets[0].length; i++) {
+			        	var period = {
+			        		date: recordsets[0][i].Date
+			        	};
+			        	periods[i] = period;
+			        };	
+					//Respuesta (Array : JSON)
+					response.json(periods);		        	
 		        }
 		        else {
 		        	response.json(undefined);		
