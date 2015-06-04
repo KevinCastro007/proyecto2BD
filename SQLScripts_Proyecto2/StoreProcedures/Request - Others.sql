@@ -21,6 +21,7 @@ BEGIN
 									BEGIN
 										INSERT INTO dbo.AP_ServiceMovement(FK_ServiceMovement, AmountHours,MovementDate, MovementDescription)
 										VALUES (@RequestId, @RealAmount,@StartDate, @RealDescription)
+										--Update de LotXCycle
 									END
 								ELSE
 									RETURN 0
@@ -65,15 +66,15 @@ BEGIN
 END
 GO
 -- Procedure for viewing the possible requests that aren't approve
-CREATE PROCEDURE dbo.APSP_ApproveRequestView
+Alter PROCEDURE dbo.APSP_ApproveRequestView(@LotXCycle int)
 AS
 BEGIN
 	BEGIN TRY
 			BEGIN
-				SELECT R.RequestDescription, C.StartDate, C.EndDate FROM dbo.AP_Request R
+				SELECT R.RequestDescription FROM dbo.AP_Request R
 					inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
 					inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
-					WHERE R.State =	0
+					WHERE R.State =	0 and Lc.ID= @LotXCycle
 				RETURN 1
 			END
 				RETURN 0
@@ -83,6 +84,25 @@ BEGIN
 	END CATCH
 END
 
+GO
+Create PROCEDURE dbo.APSP_DescriptionDate(@Description Varchar(50))
+AS
+BEGIN
+	BEGIN TRY
+			BEGIN
+
+				SELECT R.RequestDescription FROM dbo.AP_Request R
+					inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
+					inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
+					WHERE R.State =	0 and Lc.ID= @LotXCycle
+				RETURN 1
+			END
+				RETURN 0
+	END TRY
+	BEGIN CATCH
+		RETURN @@ERROR * -1
+	END CATCH
+END
 GO
 -- Procedure for modifing a request
 CREATE PROCEDURE dbo.APSP_ModifyRequest(@StartDate DATE, @EndDate DATE, @Description VARCHAR(150), @RequestType VARCHAR(50), @Amount FLOAT)
