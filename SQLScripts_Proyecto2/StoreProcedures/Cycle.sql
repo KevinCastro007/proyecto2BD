@@ -21,3 +21,48 @@ BEGIN
 		RETURN @@ERROR * -1
 	END CATCH
 END
+
+GO
+-- Procedure for returning the ID of a cycle with a lot code
+CREATE Procedure [dbo].[APSP_ViewAllCycles](@CodeLot VARCHAR(50))
+AS
+BEGIN
+	SELECT LC.FK_Cycle FROM dbo.AP_LotXCycle LC
+	WHERE LC.FK_Lot = dbo.APFN_LotID(@CodeLot)
+END
+GO
+
+-- Procedure for returning the start dates filtered by lot code
+CREATE Procedure [dbo].[APSP_ViewAllCyclesStart](@CodeLot VARCHAR(50))
+AS
+BEGIN
+	SELECT C.StartDate FROM dbo.AP_Cycle C
+	inner join dbo.AP_LotXCycle LC on LC.FK_Cycle = C.ID 
+	WHERE LC.FK_Cycle = @CodeLot
+	
+END
+GO
+
+
+-- Procedure for returning the end dates filtered by lot code
+CREATE Procedure [dbo].[APSP_ViewAllCyclesEnd](@CodeLot VARCHAR(50))
+AS
+BEGIN
+	SELECT C.EndDate FROM dbo.AP_Cycle C
+	inner join dbo.AP_LotXCycle LC on LC.FK_Cycle = C.ID 
+	WHERE LC.FK_Cycle = @CodeLot
+END
+GO
+
+-- Function for returning the ID of a cycle filtered by its code
+CREATE FUNCTION [dbo].[APFN_Cycle](@Code VARCHAR(50))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @Result INT
+	SET @Result = 0
+	SELECT @Result = C.ID FROM dbo.AP_Cycle C
+		WHERE C.ID = @Code
+	RETURN @Result
+END
+GO
