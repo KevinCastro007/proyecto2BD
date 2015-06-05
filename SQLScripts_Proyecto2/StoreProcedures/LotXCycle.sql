@@ -42,3 +42,15 @@ BEGIN
 		inner join dbo.AP_Attendant A ON A.ID = LC.FK_Attendant
 		WHERE LC.ID = @ID
 END
+
+GO
+-- Procedure for returning the ID of a Lot X Cycle for an specific attendant
+CREATE PROCEDURE [dbo].[APSP_LotXCycleAttendant](@Attendant VARCHAR(50))
+AS
+BEGIN
+	SELECT LC.ID FROM dbo.AP_LotXCycle LC
+	WHERE LC.FK_Attendant = dbo.APFN_AttendantID(@Attendant)
+END
+GO
+
+
