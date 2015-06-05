@@ -7,7 +7,7 @@ myApp.config(function ($routeProvider) {
 	$routeProvider
 		.when('/', {
 			templateUrl : '../pages/home.html',
-			controller 	: 'mainController'
+			controller 	: 'homeController'
 		})
 		.when('/history', {
 			templateUrl : '../pages/history.html',
@@ -35,24 +35,43 @@ myApp.config(function ($routeProvider) {
 });
 
 myApp.factory('sharedProperties', function () {
-    var fk_LotXCycle = 0; 
+    var lotXCycleID = 0;
+    var propertyID = 0;
     var interfaz = {
-        getValue: function(){
-            return fk_LotXCycle;
+        getLotXCycle: function(){
+            return lotXCycleID;
         },
-        setValue: function(value){
-            fk_LotXCycle = value;
+        setLotXCycle: function(value){
+            lotXCycleID = value;
+        },     
+        getProperty: function(){
+            return propertyID;
+        },
+        setProperty: function(value){
+            propertyID = value;
         }
     }
     return interfaz;
 });
 
 //Main Controller
-myApp.controller('mainController', function ($scope, $http, sharedProperties) {	
+myApp.controller('mainController', function ($scope, $http, sharedProperties) {
+	$scope.propertySelection = function () {
+		window.location = "main.html?name=" + $scope.access.property.name + "&id="+$scope.access.property.ID;
+	};	
+	$http.get('/properties').success(function (response) {
+		$scope.properties = response;	
+	});	
+});
+
+//Home Controller
+myApp.controller('homeController', function ($scope, $http, sharedProperties) {
 	$scope.salir = function () {
-		window.location = ("/index.html"); 
+		window.location = ("../index.html"); 
 	};
 	$scope.init = function () {
+		$scope.showLotInfo = false;
+		$scope.showLotSelection = true;
 		var loc = document.location.href;
 	    // Si existe el interrogante.
 	    if(loc.indexOf('?') > 0) {
@@ -66,22 +85,46 @@ myApp.controller('mainController', function ($scope, $http, sharedProperties) {
 	            var tmp = GET[i].split('=');
 	            get[tmp[0]] = unescape(decodeURI(tmp[1]));
 	        }
-			$scope.lot = ""; 
-	        for (i = 0; i < get["lot"].length; i++) {
-	        	if (get["lot"][i] == "#") {
+			var property = ""; 
+	        for (i = 0; i < get["id"].length; i++) {
+	        	if (get["id"][i] == "#") {
 	        		break;
 	        	}
-	        	$scope.lot += get["lot"][i]; 	
+	        	property += get["id"][i]; 	
 	        }   	
-	        $scope.property = get["property"];
-	        sharedProperties.setValue(parseInt(get["fk"]));
-			$http.get('/lotXCycle/' + sharedProperties.getValue()).success(function (response) {
-				$scope.attendant = response.attendant;
+	        $scope.property = get["name"];
+	        sharedProperties.setProperty(property);
+	    }
+		$http.get('/lots/' + sharedProperties.getProperty()).success(function (response) {
+			$scope.lots = response;
+		});
+	};
+	$scope.lotSelection = function () {
+		$scope.cycles = null;
+		$scope.showLotInfo = false;
+		$http.get('/cycles/' + $scope.access.lot.ID).success(function (response) {
+			$scope.cycles = response;
+		});			
+	};	
+	$scope.cycleSelection = function () {
+		var IDs = [$scope.access.lot.ID, $scope.access.cycle.ID];
+		$http.get('/lotXCycleID/' + IDs).success(function (response) {
+			sharedProperties.setLotXCycle(response);
+			$http.get('/lotXCycle/' + sharedProperties.getLotXCycle()).success(function (response) {
+				$scope.cropType = response.cropType;
 				$scope.suppliesBalance = response.suppliesBalance;
 				$scope.servicesBalance = response.servicesBalance;
-				$scope.machineryBalance = response.machineryBalance;				
-			});
-	    }		
+				$scope.machineryBalance = response.machineryBalance;		
+			});	
+			$scope.lot = $scope.access.lot.code;
+			$scope.access = "";
+			$scope.showLotInfo = true;		
+			$scope.showLotSelection = false;		
+		});			
+	};	
+	$scope.changeLot = function () {
+		$scope.showLotInfo = false;		
+		$scope.showLotSelection = true;
 	};
 });
 
@@ -91,16 +134,27 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 		$http.get('/activities').success(function (response) {
 			$scope.activities = response;	
 		});	
-		$http.get('/historicalDates/' + sharedProperties.getValue()).success(function (response) {
+		$http.get('/historicalDates/' + sharedProperties.getLotXCycle()).success(function (response) {
 			$scope.periods = response;	
 		});			
 		$scope.historical = "";		
 	};	
+	$scope.lotSelection = function () {
+		$scope.cycles = null;
+		$scope.flag = false;
+		$http.get('/cycles/' + $scope.access.lot.ID).success(function (response) {
+			$scope.cycles = response;
+		});			
+	};	
+	$scope.cycleSelection = function () {
+		var IDs = [$scope.access.lot.ID, $scope.access.cycle.ID];
+		$http.get('/lotXCycleID/' + IDs).success(function (response) {
+			sharedProperties.setLotXCycle(response);	
+		});			
+	};	
 	$scope.proceed = function () {
-		console.log($scope.historical);
-		$http.post('/historical/' + sharedProperties.getValue(), $scope.historical).success(function (response) {
+		$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {
 			if (typeof(response) != 'undefined') {
-				console.log(response);
 				$scope.histories = response;	
 				$scope.flag = true;
 			} 
@@ -117,8 +171,20 @@ myApp.controller('requestController', function ($scope, $http, sharedProperties)
 		});	
 		$scope.request = "";		
 	};
+	$scope.lotSelection = function () {
+		$scope.cycles = null;
+		$scope.flag = false;
+		$http.get('/cycles/' + $scope.access.lot.ID).success(function (response) {
+			$scope.cycles = response;
+		});			
+	};	
+	$scope.cycleSelection = function () {
+		var IDs = [$scope.access.lot.ID, $scope.access.cycle.ID];
+		$http.get('/lotXCycleID/' + IDs).success(function (response) {
+			sharedProperties.setLotXCycle(response);	
+		});			
+	};		
 	$scope.typeSelection = function () {
-		console.log($scope.request.type);
 		if ($scope.request.type == 'Suministro') {
 			$http.get('/supplies').success(function (response) {
 				$scope.item = "Suministro:";
@@ -154,7 +220,7 @@ myApp.controller('requestController', function ($scope, $http, sharedProperties)
 			alert("Seleccione el Estado!");
 		}		
 		else {	
-			$http.put('/request/' + sharedProperties.getValue(), $scope.request).success(function (response) {
+			$http.put('/request/' + sharedProperties.getLotXCycle(), $scope.request).success(function (response) {
 				if (response.resultado) {
 					refresh();
 					alert("Solicitud procesada!");

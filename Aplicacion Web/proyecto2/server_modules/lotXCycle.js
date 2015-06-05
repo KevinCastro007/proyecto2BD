@@ -30,7 +30,7 @@ module.exports = function (app, mssql, configuration) {
 		    request.execute('dbo.APSP_LotXCycle', function (err, recordsets, returnValue) {
 		        //Respuesta (Array : JSON)	
 		        var resultado = {
-		        	attendant: recordsets[0][0].Attendant,
+		        	cropType: recordsets[0][0].CropType,
 		        	suppliesBalance: recordsets[0][0].SuppliesBalance,
 		        	servicesBalance: recordsets[0][0].ServicesBalance,
 		        	machineryBalance: recordsets[0][0].MachineryBalance

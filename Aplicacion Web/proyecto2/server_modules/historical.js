@@ -23,10 +23,11 @@ module.exports = function (app, mssql, configuration) {
 	//Historiales (server get)
 	app.post('/historical/:lotXCycleID', function (request, response) {	
 		var lotXCycleID = request.params.lotXCycleID;
-		var start = typeof(request.body.start) == 'undefined' ? null :  request.body.start.date;
-		var end = typeof(request.body.end) == 'undefined' ? null :  request.body.end.date;
-		var requestType = typeof(request.body.requestType) == 'undefined' ? null :  request.body.requestType;
-		var activity = typeof(request.body.activity) == 'undefined' ? null :  request.body.activity.name;
+		var start = typeof(request.body.start) == 'undefined' ? null : (request.body.start.date == "" ? null : request.body.start.date);
+		var end = typeof(request.body.end) == 'undefined' ? null : (request.body.end.date == "" ? null : request.body.end.date );
+		var requestType = typeof(request.body.requestType) == 'undefined' ? null : request.body.requestType;
+		var activity = typeof(request.body.activity) == 'undefined' ? null : (request.body.activity.name == "" ? null : request.body.activity.name);
+		console.log(activity);
 		//Conexión a la BD según: configuration.
 		var connection = new mssql.Connection(configuration, function (err) {
 			//Request de la Conexión.
@@ -83,7 +84,7 @@ module.exports = function (app, mssql, configuration) {
 			        	var period = {
 			        		date: recordsets[0][i].Date
 			        	};
-			        	periods[i] = period;
+			        	periods[i + 1] = period;
 			        };	
 					//Respuesta (Array : JSON)
 					response.json(periods);		        	

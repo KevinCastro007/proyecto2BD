@@ -38,8 +38,9 @@ GO
 CREATE PROCEDURE APSP_LotXCycle(@ID INT)
 AS
 BEGIN
-	SELECT A.Name AS Attendant, LC.ServicesBalance, LC.SuppliesBalance, LC.MachineryBalance FROM dbo.AP_LotXCycle LC
+	SELECT CT.Name AS CropType, LC.ServicesBalance, LC.SuppliesBalance, LC.MachineryBalance FROM dbo.AP_LotXCycle LC
 		inner join dbo.AP_Attendant A ON A.ID = LC.FK_Attendant
+		inner join dbo.AP_CropType CT ON CT.ID = LC.FK_CropType
 		WHERE LC.ID = @ID
 END
 

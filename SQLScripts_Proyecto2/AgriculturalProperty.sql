@@ -85,6 +85,7 @@ CREATE TABLE AP_LotXCycle
 	CONSTRAINT FK_CropType FOREIGN KEY(FK_CropType) REFERENCES AP_CropType(ID),	
 	FK_Cycle INT not null,
 	CONSTRAINT FK_Cycle FOREIGN KEY(FK_Cycle) REFERENCES AP_Cycle(ID),	
+	-- REMOVER ATTENDANT
 	FK_Attendant INT not null,
 	CONSTRAINT FK_Attendant FOREIGN KEY(FK_Attendant) REFERENCES AP_Attendant(ID),	
 	ServicesBalance FLOAT not null,
@@ -96,6 +97,8 @@ GO
 CREATE TABLE AP_Request
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
+	-- AGREGAR ATTENDANT
+	-- AGREGAR ActivityType
 	FK_RequestManager INT not null,
 	CONSTRAINT FK_RequestManager FOREIGN KEY(FK_RequestManager) REFERENCES AP_Manager(ID),		
 	FK_LotXCycle INT not null,
@@ -109,7 +112,8 @@ CREATE TABLE AP_Request
 GO
 CREATE TABLE AP_HistoricalActivity
 (
-	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
+	ID INT IDENTITY(1, 1) PRIMARY KEY not null,
+	-- REMOVER ActivityType	
 	FK_ActivityType INT not null,
 	CONSTRAINT FK_ActivityType FOREIGN KEY(FK_ActivityType) REFERENCES AP_ActivityType(ID),	
 	FK_Request INT not null,

@@ -26,14 +26,16 @@ module.exports = function (app, mssql, configuration) {
 		    //Ejecución del Store Procedure (SP).
 		    request.execute('dbo.APSP_Activities', function (err, recordsets, returnValue) {      	
 		        //Inicialización del Array Respuesta.  		
-		        activities = new Array(recordsets[0].length);
+		        activities = new Array(recordsets[0].length + 1);
+		        activity = new activityStructure();
+		        activities[0] = activity;
 		        for (var i = 0; i < recordsets[0].length; i++) {
 		        	//JSON : Activity
 		        	activity = new activityStructure();
 		        	activity.ID = recordsets[0][i].ID;
 		        	activity.name = recordsets[0][i].Name;
 		        	//Adjuntar el JSON al Array Respuesta.
-		        	activities[i] = activity;
+		        	activities[i + 1] = activity;
 		        };
 				//Respuesta (Array : JSON)
 				response.json(activities);
