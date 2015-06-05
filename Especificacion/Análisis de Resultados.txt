@@ -1,0 +1,20 @@
+- Programación de actividades y el control de costos para cada
+lote (en un ciclo específico) en una empresa que administra varias 
+fincas.
+
++ Solicitud de suministros, servicios o maquinaria: Completo.
+
++ Aprobación de solicitudes: Completo.
+
++ Historial de las gestiones o actividades que se realizan conforme el
+procedimiento por cada lote: Parcialmente completo.
+	- Administración completa de una finca. Poner a disposición la selección
+	del lote y el ciclo para realizar las operaciones y consultas.
+	- Cálculo de subtotales de costos por cada actividad, previamente
+	seleccionada como parte del filtro.
+	- Filtro de todas las actividad y cálculos de costos subtotales por los 
+	encargados.
+	- Filtros por tipo de cosecha, rango de fechas, lote o tipos de solicitudes.
+
+
+

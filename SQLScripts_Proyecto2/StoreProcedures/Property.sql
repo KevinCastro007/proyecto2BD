@@ -15,3 +15,15 @@ BEGIN
 		RETURN @@ERROR * -1
 	END CATCH
 END
+
+GO
+CREATE PROCEDURE APSP_InsertProperty(@Name VARCHAR(50))
+AS
+BEGIN
+	IF (dbo.APFN_PropertyID == 0) 
+	BEGIN
+		INSERT INTO dbo.AP_Property(Name) VALUES(@Name)
+		RETURN 1
+	END
+	RETURN 0
+END
