@@ -2,17 +2,14 @@
 <div id="page-content-wrapper">
     <div class="container-fluid">
         <div class="row">            
-            <div class="col-lg-12">
+            <div class="col-lg-12" ng-init="init()">
                 <h3>Nueva Solicitud</h3> 
                 <strong><p>Lote:</p></strong>
                 <select ng-change="lotSelection()" ng-model="access.lot" ng-options="lot.code for lot in lots" style="height: 33px; width: 250px"></select>
                 <strong><p><br>Ciclo:</p></strong>
                 <select ng-change="cycleSelection()" ng-model="access.cycle" ng-options="cycle.period for cycle in cycles" style="height: 33px; width: 250px"></select>                      
                 <strong><p><br>Tipo de Solicitud:</p></strong>
-                <select ng-model="request.type" ng-change="typeSelection()" style="height: 33px; width: 250px">
-                    <option>Suministro</option>                
-                    <option>Servicio</option>                
-                    <option>Maquinaria</option>                
+                <select ng-change="typeSelection()" ng-model="request.type" ng-options="type for type in types" style="height: 33px; width: 250px">              
                 </select> 
                 <strong><p><br>Tipo de Actividad:</p></strong>
                 <select ng-model="request.activity" ng-options="activity.name for activity in activities" style="height: 33px; width: 250px"></select> 

@@ -20,7 +20,7 @@ END
 
 /* - Procedure for obtain the Historical - */
 GO 
-CREATE PROCEDURE APSP_Historical(@FK_LotXCycle INT, @ActivityType VARCHAR(50), @Start DATE, @End DATE, @RequestType VARCHAR(50))
+CREATE PROCEDURE APSP_Historical(@FK_LotXCycle INT, @ActivityType VARCHAR(50), @Start VARCHAR(50), @End VARCHAR(50), @RequestType VARCHAR(50))
 AS
 BEGIN
 	BEGIN TRY
@@ -37,3 +37,5 @@ BEGIN
 		RETURN @@ERROR * -1
 	END CATCH
 END
+
+execute APSP_Historical 3, 'Siembra', '02/06/2015', '02/06/2015', 'Suministro'

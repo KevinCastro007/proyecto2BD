@@ -133,12 +133,12 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 	var refresh = function () {
 		$http.get('/activities').success(function (response) {
 			$scope.activities = response;	
-		});	
-		$http.get('/historicalDates/' + sharedProperties.getLotXCycle()).success(function (response) {
-			$scope.periods = response;	
 		});			
 		$scope.historical = "";		
-	};	
+	};		
+	$scope.init = function () {
+		$scope.requestTypes = ['', 'Suministro', 'Maquinaria', 'Servicio'];	
+	};
 	$scope.lotSelection = function () {
 		$scope.cycles = null;
 		$scope.flag = false;
@@ -149,8 +149,11 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 	$scope.cycleSelection = function () {
 		var IDs = [$scope.access.lot.ID, $scope.access.cycle.ID];
 		$http.get('/lotXCycleID/' + IDs).success(function (response) {
-			sharedProperties.setLotXCycle(response);	
-		});			
+			sharedProperties.setLotXCycle(response);
+			$http.get('/historicalDates/' + sharedProperties.getLotXCycle()).success(function (response) {
+				$scope.periods = response;	
+			});	
+		});					
 	};	
 	$scope.proceed = function () {
 		$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {
