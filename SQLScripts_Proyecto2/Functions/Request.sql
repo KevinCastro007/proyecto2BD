@@ -1,6 +1,7 @@
 USE [AgriculturalProperty]
 GO
 --Function for verifing the approval of a certain request
+GO
 CREATE FUNCTION [dbo].[APFN_ApproveRequestVerify](@oldDescription VARCHAR(200), @RealAmount FLOAT, @RealDescription VARCHAR(50))
 RETURNS INT
 AS
@@ -51,7 +52,7 @@ BEGIN
 			END
 				RETURN 0
 END
-
+GO
 
 --Function for verifing the modification of a certain request
 CREATE Function [dbo].[APFN_ModifyValidate](@oldDescription VARCHAR(200), @Description VARCHAR(200), @RequestType VARCHAR(50), @Amount FLOAT)
