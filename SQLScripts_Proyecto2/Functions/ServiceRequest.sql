@@ -1,8 +1,8 @@
-USE [AgriculturalProperty]
+USE AgriculturalProperty
 GO
 
 -- Function for returning the ID of a ServiceRequest with an ID as parameter
-CREATE FUNCTION dbo.APFN_ServiceRequestID(@ID INT)
+CREATE FUNCTION APFN_ServiceRequestID(@ID INT)
 RETURNS INT
 AS
 BEGIN

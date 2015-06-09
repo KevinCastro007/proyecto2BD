@@ -7,9 +7,7 @@ GO
 
 declare @doc xml
 select    @doc = BulkColumn
-from    openrowset(
-            bulk 'C:\archivo.xml', SINGLE_CLOB
-        ) as xmlData
+from    openrowset(bulk 'C:\archivo.xml', SINGLE_CLOB) as xmlData
 		
 select  farm.value('@name', 'varchar(50)') AS Finca,
 		lot.value('@code', 'varchar(50)') AS Lote,

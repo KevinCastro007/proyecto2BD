@@ -8,6 +8,7 @@ function historyStructure() {
 	{		
 		date: "",
 		activity: "",
+		attendant: "",
 		requestType: "",
 		//requestItem: "",
 		//amount: 0,
@@ -27,22 +28,18 @@ module.exports = function (app, mssql, configuration) {
 		var end = typeof(request.body.end) == 'undefined' ? null : (request.body.end.date == "" ? null : request.body.end.date );
 		var requestType = typeof(request.body.requestType) == 'undefined' ? null : (request.body.requestType == "" ? null : request.body.requestType);
 		var activity = typeof(request.body.activity) == 'undefined' ? null : (request.body.activity.name == "" ? null : request.body.activity.name);
-
-		console.log(start);
-		console.log(end);
 		//Conexión a la BD según: configuration.
 		var connection = new mssql.Connection(configuration, function (err) {
 			//Request de la Conexión.
 		    var request = new mssql.Request(connection);
 		    request.input('FK_LotXCycle', mssql.Int, lotXCycleID);
 		    request.input('ActivityType', mssql.VarChar(50), activity);
-		    request.input('Start', mssql.VarChar(50), start);
-		    request.input('End', mssql.VarChar(50), end);
+		    request.input('Start', mssql.Date, start);
+		    request.input('End', mssql.Date, end);
 		    request.input('RequestType', mssql.VarChar(50), requestType);
 		    //Ejecución del Store Procedure (SP).
 		    request.execute('dbo.APSP_Historical', function (err, recordsets, returnValue) {
-		        //Inicialización del Array Respuesta.  	
-		        //console.log(recordsets[0]);
+		        //Inicialización del Array Respuesta.
 		        if (typeof(recordsets[0]) != 'undefined') {
 		        	console.log("Successful execution (SP: HISTORICAL)");
 			        historical = new Array(recordsets[0].length);
@@ -51,6 +48,7 @@ module.exports = function (app, mssql, configuration) {
 			        	history = new historyStructure();
 			        	history.date = recordsets[0][i].ActivityDate;
 			        	history.activity = recordsets[0][i].ActivityName;
+			        	history.attendant = recordsets[0][i].Attendant;
 			        	history.requestType = recordsets[0][i].RequestType;
 			        	//history.requestItem = ;
 			        	//history.amount = ;

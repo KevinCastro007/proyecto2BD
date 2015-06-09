@@ -34,12 +34,3 @@ BEGIN
 		RETURN @@ERROR * -1
 	END CATCH
 END
-
-GO
--- Procedure for returning the lot codes filteres by ID of the lot
-Create Procedure [dbo].[APSP_ViewAllLots](@Num int)
-AS
-BEGIN
-	SELECT L.Code FROM dbo.AP_Lot L
-END
-GO

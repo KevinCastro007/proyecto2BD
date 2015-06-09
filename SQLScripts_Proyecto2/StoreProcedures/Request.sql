@@ -4,7 +4,7 @@ GO
 USE AgriculturalProperty
 
 GO
-CREATE PROCEDURE APSP_InsertRequest(@FK_LotXCycle INT,  @FK_ActivityType INT, @RequestType VARCHAR(50), @Request VARCHAR(50), @Amount FLOAT, @State VARCHAR(50))
+CREATE PROCEDURE APSP_InsertRequest(@FK_LotXCycle INT,  @FK_ActivityType INT, @FK_Attendant INT, @RequestType VARCHAR(50), @Request VARCHAR(50), @Amount FLOAT, @State VARCHAR(50))
 AS
 BEGIN
 	BEGIN TRY
@@ -30,15 +30,15 @@ BEGIN
 							WHERE LC.ID = @FK_LotXCycle
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_RequestManager, FK_LotXCycle, FK_RequestType, RequestDescription, RequestState) 
-								VALUES(dbo.APFN_RequestTypeManagerID(@RequestType), @FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @ServiceRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @ServiceRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()				
-							INSERT INTO dbo.AP_HistoricalActivity(FK_ActivityType, FK_Request, ActivityDate, ActivityDescription)
-								VALUES(@FK_ActivityType, @RequestID, GETDATE(), @ServiceHistoricalDescription)					
+							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
+								VALUES(@RequestID, GETDATE(), @ServiceHistoricalDescription)			
 							INSERT INTO dbo.AP_ServiceRequest(ID, FK_Service, AmountHours) 
 								VALUES(@RequestID, dbo.APFN_ServiceID(@Request), @Amount)
 							INSERT INTO dbo.AP_ServiceMovement(FK_ServiceRequest, Amount, MovementDate, MovementDescription)
-								VALUES(@RequestID, dbo.APFN_ServiceCost(@Request) * @Amount, GETDATE(), @ServiceMovementDescription)								
+								VALUES(@RequestID, dbo.APFN_ServiceCost(@Request) * @Amount, GETDATE(), @ServiceMovementDescription)	
 							UPDATE dbo.AP_LotXCycle SET ServicesBalance = ServicesBalance + dbo.APFN_ServiceCost(@Request) * @Amount
 								FROM dbo.AP_LotXCycle LC 
 								WHERE LC.ID = @FK_LotXCycle
@@ -48,11 +48,11 @@ BEGIN
 					BEGIN
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_RequestManager, FK_LotXCycle, FK_RequestType, RequestDescription, RequestState) 
-								VALUES(dbo.APFN_RequestTypeManagerID(@RequestType), @FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @ServiceRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @ServiceRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()				
-							INSERT INTO dbo.AP_HistoricalActivity(FK_ActivityType, FK_Request, ActivityDate, ActivityDescription)
-								VALUES(@FK_ActivityType, @RequestID, GETDATE(), @ServiceHistoricalDescription)					
+							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
+								VALUES(@RequestID, GETDATE(), @ServiceHistoricalDescription)			
 							INSERT INTO dbo.AP_ServiceRequest(ID, FK_Service, AmountHours) 
 								VALUES(@RequestID, dbo.APFN_ServiceID(@Request), @Amount)
 						COMMIT
@@ -81,18 +81,18 @@ BEGIN
 							WHERE LC.ID = @FK_LotXCycle
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_RequestManager, FK_LotXCycle, FK_RequestType, RequestDescription, RequestState) 
-								VALUES(dbo.APFN_RequestTypeManagerID(@RequestType), @FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @SupplyRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @SupplyRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()	
-							INSERT INTO dbo.AP_HistoricalActivity(FK_ActivityType, FK_Request, ActivityDate, ActivityDescription)
-								VALUES(@FK_ActivityType, @RequestID, GETDATE(), @SupplyHistoricalDescription)					
+							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
+								VALUES(@RequestID, GETDATE(), @SupplyHistoricalDescription)				
 							INSERT INTO dbo.AP_SupplyRequest(ID, FK_Supply, Amount) 
 								VALUES(@RequestID, dbo.APFN_SupplyID(@Request), @Amount)
 							INSERT INTO dbo.AP_SupplyMovement(FK_SupplyRequest, Amount, MovementDate, MovementDescription)
-								VALUES(@RequestID, dbo.APFN_SupplyCost(@Request) * @Amount, GETDATE(), @SupplyMovementDescription)									
+								VALUES(@RequestID, dbo.APFN_SupplyCost(@Request) * @Amount, GETDATE(), @SupplyMovementDescription)			
 							UPDATE dbo.AP_Supply SET Quantity = Quantity - @Amount
 								FROM dbo.AP_Supply S 
-								WHERE S.ID = dbo.APFN_SupplyID(@Request)													
+								WHERE S.ID = dbo.APFN_SupplyID(@Request)
 							UPDATE dbo.AP_LotXCycle SET SuppliesBalance = SuppliesBalance + dbo.APFN_SupplyCost(@Request) * @Amount
 								FROM dbo.AP_LotXCycle LC 
 								WHERE LC.ID = @FK_LotXCycle
@@ -102,11 +102,11 @@ BEGIN
 					BEGIN
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_RequestManager, FK_LotXCycle, FK_RequestType, RequestDescription, RequestState) 
-								VALUES(dbo.APFN_RequestTypeManagerID(@RequestType), @FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @SupplyRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @SupplyRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()				
-							INSERT INTO dbo.AP_HistoricalActivity(FK_ActivityType, FK_Request, ActivityDate, ActivityDescription)
-								VALUES(@FK_ActivityType, @RequestID, GETDATE(), @SupplyHistoricalDescription)					
+							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
+								VALUES(@RequestID, GETDATE(), @SupplyHistoricalDescription)				
 							INSERT INTO dbo.AP_SupplyRequest(ID, FK_Supply, Amount) 
 								VALUES(@RequestID, dbo.APFN_SupplyID(@Request), @Amount)
 						COMMIT
@@ -135,11 +135,11 @@ BEGIN
 							WHERE LC.ID = @FK_LotXCycle
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_RequestManager, FK_LotXCycle, FK_RequestType, RequestDescription, RequestState) 
-								VALUES(dbo.APFN_RequestTypeManagerID(@RequestType), @FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @MachineryRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @MachineryRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()				
-							INSERT INTO dbo.AP_HistoricalActivity(FK_ActivityType, FK_Request, ActivityDate, ActivityDescription)
-								VALUES(@FK_ActivityType, @RequestID, GETDATE(), @MachineryHistoricalDescription)					
+							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
+								VALUES(@RequestID, GETDATE(), @MachineryHistoricalDescription)		
 							INSERT INTO dbo.AP_MachineryRequest(ID, FK_Machinery, AmountHours) 
 								VALUES(@RequestID, dbo.APFN_MachineryID(@Request), @Amount)
 							INSERT INTO dbo.AP_MachineryMovement(FK_MachineryRequest, Amount, MovementDate, MovementDescription)
@@ -153,11 +153,11 @@ BEGIN
 					BEGIN
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_RequestManager, FK_LotXCycle, FK_RequestType, RequestDescription, RequestState) 
-								VALUES(dbo.APFN_RequestTypeManagerID(@RequestType), @FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @MachineryRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @MachineryRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()				
-							INSERT INTO dbo.AP_HistoricalActivity(FK_ActivityType, FK_Request, ActivityDate, ActivityDescription)
-								VALUES(@FK_ActivityType, @RequestID, GETDATE(), @MachineryHistoricalDescription)					
+							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
+								VALUES(@RequestID, GETDATE(), @MachineryHistoricalDescription)			
 							INSERT INTO dbo.AP_MachineryRequest(ID, FK_Machinery, AmountHours) 
 								VALUES(@RequestID, dbo.APFN_MachineryID(@Request), @Amount)
 						COMMIT				

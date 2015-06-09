@@ -153,9 +153,15 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 			$http.get('/historicalDates/' + sharedProperties.getLotXCycle()).success(function (response) {
 				$scope.periods = response;	
 			});	
+			$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {
+				if (typeof(response) != 'undefined') {
+					$scope.histories = response;	
+					$scope.flag = true;
+				} 
+			});			
 		});					
 	};	
-	$scope.proceed = function () {
+	$scope.showResult = function () {
 		$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {
 			if (typeof(response) != 'undefined') {
 				$scope.histories = response;	
@@ -172,8 +178,14 @@ myApp.controller('requestController', function ($scope, $http, sharedProperties)
 		$http.get('/activities').success(function (response) {
 			$scope.activities = response;	
 		});	
+		$http.get('/attendants').success(function (response) {
+			$scope.attendants = response;	
+		});			
 		$scope.request = "";		
-	};
+	};	
+	$scope.init = function () {
+		$scope.types = ['Suministro', 'Maquinaria', 'Servicio'];	
+	};	
 	$scope.lotSelection = function () {
 		$scope.cycles = null;
 		$scope.flag = false;
@@ -210,7 +222,10 @@ myApp.controller('requestController', function ($scope, $http, sharedProperties)
 		}
 	};
 	$scope.proceed = function () {
-		if (typeof($scope.request.type) === 'undefined') {
+		if (typeof($scope.request.attendant) === 'undefined') {
+			alert("Seleccione el Encargado!");
+		}		
+		else if (typeof($scope.request.type) === 'undefined') {
 			alert("Seleccione el Tipo!");
 		}
 		else if (typeof($scope.request.activity) === 'undefined') {

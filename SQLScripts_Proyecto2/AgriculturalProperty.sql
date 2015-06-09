@@ -53,7 +53,7 @@ CREATE TABLE AP_Lot
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
 	FK_Property INT not null,
-	CONSTRAINT FK_Property FOREIGN KEY(FK_Property) REFERENCES AP_Property(ID),	
+	CONSTRAINT FK_Property FOREIGN KEY(FK_Property) REFERENCES AP_Property(ID),
 	Code VARCHAR(50) not null		
 )
 
@@ -71,7 +71,7 @@ CREATE TABLE AP_RequestType
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
 	FK_Manager INT not null,
-	CONSTRAINT FK_Manager FOREIGN KEY(FK_Manager) REFERENCES AP_Manager(ID),	
+	CONSTRAINT FK_Manager FOREIGN KEY(FK_Manager) REFERENCES AP_Manager(ID),
 	Name VARCHAR(50) not null
 )
 
@@ -82,42 +82,44 @@ CREATE TABLE AP_LotXCycle
 	FK_Lot INT not null,
 	CONSTRAINT FK_Lot FOREIGN KEY(FK_Lot) REFERENCES AP_Lot(ID),
 	FK_CropType INT not null,
-	CONSTRAINT FK_CropType FOREIGN KEY(FK_CropType) REFERENCES AP_CropType(ID),	
+	CONSTRAINT FK_CropType FOREIGN KEY(FK_CropType) REFERENCES AP_CropType(ID),
 	FK_Cycle INT not null,
 	CONSTRAINT FK_Cycle FOREIGN KEY(FK_Cycle) REFERENCES AP_Cycle(ID),	
-	-- REMOVER ATTENDANT
-	FK_Attendant INT not null,
-	CONSTRAINT FK_Attendant FOREIGN KEY(FK_Attendant) REFERENCES AP_Attendant(ID),	
 	ServicesBalance FLOAT not null,
 	SuppliesBalance FLOAT not null,
-	MachineryBalance FLOAT not null
+	MachineryBalance FLOAT not null,	
+	PostBy VARCHAR(50),
+	PostDate DATE,
+	PostIn VARCHAR(50)
 )
 
 GO
 CREATE TABLE AP_Request
 (
-	ID INT IDENTITY(1, 1) PRIMARY KEY not null,	
-	-- AGREGAR ATTENDANT
-	-- AGREGAR ActivityType
-	FK_RequestManager INT not null,
-	CONSTRAINT FK_RequestManager FOREIGN KEY(FK_RequestManager) REFERENCES AP_Manager(ID),		
+	ID INT IDENTITY(1, 1) PRIMARY KEY not null,		
 	FK_LotXCycle INT not null,
 	CONSTRAINT FK_LotXCycle FOREIGN KEY(FK_LotXCycle) REFERENCES AP_LotXCycle(ID),
 	FK_RequestType INT not null,
-	CONSTRAINT FK_RequestType FOREIGN KEY(FK_RequestType) REFERENCES AP_RequestType(ID),	
+	CONSTRAINT FK_RequestType FOREIGN KEY(FK_RequestType) REFERENCES AP_RequestType(ID),
+	FK_RequestManager INT not null,
+	CONSTRAINT FK_RequestManager FOREIGN KEY(FK_RequestManager) REFERENCES AP_Manager(ID),			
+	FK_Attendant INT not null,
+	CONSTRAINT FK_Attendant FOREIGN KEY(FK_Attendant) REFERENCES AP_Attendant(ID),	
+	FK_ActivityType INT not null,
+	CONSTRAINT FK_ActivityType FOREIGN KEY(FK_ActivityType) REFERENCES AP_ActivityType(ID),	
 	RequestDescription VARCHAR(150) not null,
-	RequestState VARCHAR(50) not null
+	RequestState VARCHAR(50) not null,
+	PostBy VARCHAR(50),
+	PostDate DATE,
+	PostIn VARCHAR(50)	
 )
 
 GO
-CREATE TABLE AP_HistoricalActivity
+CREATE TABLE AP_Historical
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,
-	-- REMOVER ActivityType	
-	FK_ActivityType INT not null,
-	CONSTRAINT FK_ActivityType FOREIGN KEY(FK_ActivityType) REFERENCES AP_ActivityType(ID),	
 	FK_Request INT not null,
-	CONSTRAINT FK_Request FOREIGN KEY(FK_Request) REFERENCES AP_Request(ID),	
+	CONSTRAINT FK_Request FOREIGN KEY(FK_Request) REFERENCES AP_Request(ID),
 	ActivityDate DATE not null,
 	ActivityDescription VARCHAR(150) not null
 )
@@ -181,7 +183,7 @@ CREATE TABLE AP_ServiceMovement
 	FK_ServiceRequest INT not null,
 	CONSTRAINT FK_ServiceRequest FOREIGN KEY(FK_ServiceRequest) REFERENCES AP_ServiceRequest(ID),	
 	Amount FLOAT not null,
-	MovementDate DATETIME not null,
+	MovementDate DATE not null,
 	MovementDescription VARCHAR(150) not null
 )
 
@@ -192,7 +194,7 @@ CREATE TABLE AP_SupplyMovement
 	FK_SupplyRequest INT not null,
 	CONSTRAINT FK_SupplyRequest FOREIGN KEY(FK_SupplyRequest) REFERENCES AP_SupplyRequest(ID),	
 	Amount FLOAT not null,
-	MovementDate DATETIME not null,
+	MovementDate DATE not null,
 	MovementDescription VARCHAR(150) not null
 )
 GO
@@ -202,6 +204,6 @@ CREATE TABLE AP_MachineryMovement
 	FK_MachineryRequest INT not null,
 	CONSTRAINT FK_MachineryRequest FOREIGN KEY(FK_MachineryRequest) REFERENCES AP_MachineryRequest(ID),	
 	Amount FLOAT not null,
-	MovementDate DATETIME not null,
+	MovementDate DATE not null,
 	MovementDescription VARCHAR(150) not null
 )

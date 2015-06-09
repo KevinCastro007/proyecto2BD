@@ -20,7 +20,7 @@ GO
 CREATE PROCEDURE APSP_InsertProperty(@Name VARCHAR(50))
 AS
 BEGIN
-	IF (dbo.APFN_PropertyID == 0) 
+	IF (dbo.APFN_PropertyID(@Name) = 0) 
 	BEGIN
 		INSERT INTO dbo.AP_Property(Name) VALUES(@Name)
 		RETURN 1

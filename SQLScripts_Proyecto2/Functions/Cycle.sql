@@ -15,3 +15,16 @@ BEGIN
 		WHERE C.StartDate = @StartDate and C.EndDate = @EndDate
 	RETURN @Result
 END
+
+GO
+-- Function for returning the ID of a cycle filtered by its code
+CREATE FUNCTION APFN_Cycle(@Code VARCHAR(50))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @Result INT
+	SET @Result = 0
+	SELECT @Result = C.ID FROM dbo.AP_Cycle C
+		WHERE C.ID = @Code
+	RETURN @Result
+END
