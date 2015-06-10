@@ -1,0 +1,45 @@
+
+<div id="page-content-wrapper">
+    <div class="container-fluid" style="float: left">
+        <div class="col-lg-12" ng-init="init()">
+            <h3>Historial de Actividades</h3> 
+            <strong><p>Lote:</p></strong>
+            <select ng-change="lotSelection()" ng-model="access.lot" ng-options="lot.code for lot in lots" style="height: 33px; width: 250px"></select>
+            <strong><p><br>Ciclo:</p></strong>
+            <select ng-change="cycleSelection()" ng-model="access.cycle" ng-options="cycle.period for cycle in cycles" style="height: 33px; width: 250px"></select>            
+            <strong><p><br>Periodo:</p></strong>
+            <select ng-model="historical.start" ng-change="showResult()" ng-options="start.date for start in periods" style="height: 33px; width: 250px"></select>
+            <br><br><select ng-model="historical.end" ng-change="showResult()" ng-options="end.date for end in periods" style="height: 33px; width: 250px"></select>            
+            <strong><p><br>Tipo de Solicitud:</p></strong>
+            <select ng-model="historical.requestType" ng-change="showResult()" ng-options="requestType for requestType in requestTypes" style="height: 33px; width: 250px"></select> 
+            <strong><p><br>Actividad:</p></strong>
+            <select ng-model="historical.activity" ng-change="showResult()" ng-options="activity.name for activity in activities" style="height: 33px; width: 250px"></select>
+            <br><br>
+        </div>
+    </div>
+    <div ng-show="flag" class="container-fluid" style="float: left">
+        <table class="table table-bordered">
+            <thead>
+                <tr class="success">
+                    <th style="width: 110px">Fecha</th>
+                    <th style="width: 110px">Actividad</th>
+                    <th style="width: 110px">Encargado</th>
+                    <th style="width: 110px">Tipo</th>
+                    <th style="width: 280px">Descripción</th>
+                    <th style="width: 110px">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="history in histories">  <!-- Recorrer el array -->
+                    <td>{{history.date}}</td>  
+                    <td>{{history.activity}}</td>   
+                    <td>{{history.attendant}}</td>   
+                    <td>{{history.requestType}}</td>     
+                    <td>{{history.description}}</td> 
+                    <td>{{history.state}}</td>           
+                </tr>       
+            </tbody>
+        </table>
+    </div>    
+</div>
+<!-- /#page-content-wrapper -->

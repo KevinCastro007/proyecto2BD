@@ -5,15 +5,15 @@ USE AgriculturalProperty
 
 GO
 -- Procedure for inserting a LotXCycle
-CREATE PROCEDURE APSP_InsertLotXCycle(@LotCode VARCHAR(50), @CropType VARCHAR(50), @CycleStartDate DATE, @CycleEndDate DATE, @Attendant VARCHAR(50))
+CREATE PROCEDURE APSP_InsertLotXCycle(@LotCode VARCHAR(50), @CropType VARCHAR(50), @CycleStartDate DATE, @CycleEndDate DATE)
 AS
 BEGIN
 	BEGIN TRY
-		IF (dbo.APFN_CropTypeID(@CropType) <> 0 and dbo.APFN_CycleID(@CycleStartDate, @CycleEndDate) <> 0 and 
-			dbo.APFN_AttendatID(@Attendant) <> 0 and dbo.APFN_LotID(@LotCode) <> 0) 
+		IF (dbo.APFN_CropTypeID(@CropType) <> 0 and dbo.APFN_CycleID(@CycleStartDate, @CycleEndDate) <> 0 and
+			dbo.APFN_LotID(@LotCode) <> 0) 
 		BEGIN
-			INSERT INTO dbo.AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, FK_Attendant, ServicesBalance, SuppliesBalance, MachineryBalance)
-				VALUES(dbo.APFN_LotID(@LotCode), dbo.APFN_CropTypeID(@CropType), dbo.APFN_CycleID(@CycleStartDate, @CycleEndDate), dbo.APFN_AttendatID(@Attendant), 0, 0, 0) 
+			INSERT INTO dbo.AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, ServicesBalance, SuppliesBalance, MachineryBalance)
+				VALUES(dbo.APFN_LotID(@LotCode), dbo.APFN_CropTypeID(@CropType), dbo.APFN_CycleID(@CycleStartDate, @CycleEndDate), 0, 0, 0) 
 			RETURN 1
 		END
 		ELSE
@@ -26,7 +26,7 @@ END
 
 GO
 -- Procedure for returning the ID of a Lot X Cycle
-CREATE PROCEDURE APSP_LotXCycle(@FK_Lot INT, @FK_Cycle INT)
+CREATE PROCEDURE APSP_LotXCycleID(@FK_Lot INT, @FK_Cycle INT)
 AS
 BEGIN
 	SELECT LC.ID FROM dbo.AP_LotXCycle LC
@@ -34,11 +34,11 @@ BEGIN
 END
 
 GO
--- Procedure for returning the ID of a Lot X Cycle
-CREATE PROCEDURE APSP_LotXCycleAttendant(@ID INT)
+-- Procedure for returning the whole information of a Lot X Cycle
+CREATE PROCEDURE APSP_LotXCycle(@ID INT)
 AS
 BEGIN
-	SELECT A.Name FROM dbo.AP_Attendant A
-		inner join dbo.AP_LotXCycle LC ON LC.FK_Attendant = A.ID
+	SELECT CT.Name AS CropType, LC.ServicesBalance, LC.SuppliesBalance, LC.MachineryBalance FROM dbo.AP_LotXCycle LC
+		inner join dbo.AP_CropType CT ON CT.ID = LC.FK_CropType
 		WHERE LC.ID = @ID
 END

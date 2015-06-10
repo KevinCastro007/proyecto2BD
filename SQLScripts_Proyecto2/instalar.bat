@@ -10,9 +10,13 @@ sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\LotXCycle.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\Machinery.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\Manager.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\Property.sql
+sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\Request.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\RequestType.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\Service.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\Supply.sql
+sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\ServiceRequest.sql
+sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\SupplyRequest.sql
+sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\MachineryRequest.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Activity.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\ActivityType.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Attendant.sql
@@ -25,6 +29,7 @@ sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\LotXCycle.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Machinery.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Property.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Request.sql
+sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Request-Others.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\RequestType.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Service.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Supply.sql

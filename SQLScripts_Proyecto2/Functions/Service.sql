@@ -15,3 +15,16 @@ BEGIN
 		WHERE S.Name = @Name
 	RETURN @Result
 END
+
+/* - Procedure for obtain the Cost of a Service - */
+GO 
+CREATE FUNCTION APFN_ServiceCost(@Name VARCHAR(50))
+RETURNS FLOAT
+AS
+BEGIN
+	DECLARE @Result FLOAT
+	SET @Result = 0
+	SELECT @Result = S.Cost FROM dbo.AP_Service S
+		WHERE S.Name = @Name
+	RETURN @Result
+END
