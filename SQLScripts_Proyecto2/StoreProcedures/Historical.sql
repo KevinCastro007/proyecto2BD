@@ -9,9 +9,9 @@ CREATE PROCEDURE APSP_HistoricalDates(@FK_LotXCycle INT)
 AS
 BEGIN
 	BEGIN TRY
-		SELECT DISTINCT CONVERT(VARCHAR(10), HA.ActivityDate, 103) AS Date FROM dbo.AP_HistoricalActivity HA
-			inner join dbo.AP_Request R ON R.ID = HA.FK_Request
-			WHERE R.FK_LotXCycle = @FK_LotXCycle
+		SELECT DISTINCT CONVERT(VARCHAR(10), H.ActivityDate, 103) AS Date FROM dbo.AP_Historical H
+			inner join dbo.AP_Request R ON R.ID = H.FK_Request
+			WHERE R.FK_LotXCycle = @FK_LotXCycleC
 	END TRY
 	BEGIN CATCH 
 		RETURN @@ERROR * -1

@@ -9,12 +9,12 @@
                 <select ng-change="cycleSelection()" ng-model="access.cycle" ng-options="cycle.period for cycle in cycles" style="height: 33px; width: 250px"></select>   
                 <strong><p><br>Encargado:</p></strong>
                 <select ng-model="request.attendant" ng-options="attendant.name for attendant in attendants" style="height: 33px; width: 250px">              
-                </select>                                   
+                </select> 
+                <strong><p><br>Tipo de Actividad:</p></strong>
+                <select ng-model="request.activity" ng-options="activity.name for activity in activities" style="height: 33px; width: 250px"></select>                                   
                 <strong><p><br>Tipo de Solicitud:</p></strong>
                 <select ng-change="typeSelection()" ng-model="request.type" ng-options="type for type in types" style="height: 33px; width: 250px">              
                 </select> 
-                <strong><p><br>Tipo de Actividad:</p></strong>
-                <select ng-model="request.activity" ng-options="activity.name for activity in activities" style="height: 33px; width: 250px"></select> 
                 <strong><p><br>{{item}}</p></strong> 
                 <select ng-model="request.item" ng-options="item.name for item in items" style="height: 33px; width: 250px"></select> 
                 <strong><p><br>Cantidad{{amount}}:</p></strong>  
@@ -27,7 +27,6 @@
                 <br><br>
                 <button class="btn btn-primary" ng-click="proceed()" style="height: 33px; width: 250px">Solicitar</button>
             </div>
-            </strong>
         </div>
     </div>
 </div>

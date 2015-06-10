@@ -151,6 +151,7 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 		$http.get('/lotXCycleID/' + IDs).success(function (response) {
 			sharedProperties.setLotXCycle(response);
 			$http.get('/historicalDates/' + sharedProperties.getLotXCycle()).success(function (response) {
+				console.log(response);
 				$scope.periods = response;	
 			});	
 			$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {
@@ -184,6 +185,7 @@ myApp.controller('requestController', function ($scope, $http, sharedProperties)
 		$scope.request = "";		
 	};	
 	$scope.init = function () {
+		$scope.item = "Item";
 		$scope.types = ['Suministro', 'Maquinaria', 'Servicio'];	
 	};	
 	$scope.lotSelection = function () {
@@ -242,7 +244,6 @@ myApp.controller('requestController', function ($scope, $http, sharedProperties)
 				if (response.resultado) {
 					refresh();
 					alert("Solicitud procesada!");
-					document.location.reload();
 				}
 				else {
 					alert("Imposible realizar la Solicitud!");					

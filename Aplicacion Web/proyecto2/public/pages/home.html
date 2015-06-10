@@ -3,8 +3,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h4>Esta aplicación pone a su disposición filtros de información del historial de actividades de la Finca.<br>
-                El procesamiento de solicitudes de suministros, maquinaria o servicios.<br></h4>
+                <h4>Esta aplicación pone a su disposición filtros de información del historial de actividades de la Finca.<br>El procesamiento de solicitudes de suministros, maquinaria o servicios.<br></h4>
                 <div ng-show="showLotSelection">
                     <strong><p><br>Lote:</p></strong>
                     <select ng-change="lotSelection()" ng-model="access.lot" ng-options="lot.code for lot in lots" style="height: 33px; width: 250px"></select>
@@ -26,7 +25,7 @@
                             <h4>Maquinaria: {{machineryBalance}}</h4>
                         </li>
                     </ul>  
-                    <br><button class="btn btn-info" ng-click="changeLot()">Seleccionar otro Lote</button>                  
+                    <br><button class="btn btn-info" ng-click="changeLot()">Cambiar</button>                  
                 </div>
             </div>
         </div>
