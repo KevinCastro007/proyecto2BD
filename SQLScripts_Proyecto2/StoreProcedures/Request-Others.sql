@@ -1,85 +1,65 @@
 GO
 USE AgriculturalProperty
-GO
 
+GO
 -- Procedure for approving a certain request
 CREATE PROCEDURE dbo.APSP_ApproveRequest(@oldDescription VARCHAR(200), @RealAmount FLOAT, @RealDescription VARCHAR(50))
 AS
 BEGIN
 	BEGIN TRY
+		IF (dbo.APFN_ApproveRequestVerify(@oldDescription, @RealAmount, @RealDescription) = 1)
+		BEGIN
+			DECLARE @RequestId INT, @RequestAmount FLOAT
+			SET @RequestId = (SELECT R.ID  FROM dbo.AP_Request R
+								WHERE R.RequestState ='Pendiente' and  R.RequestDescription = @oldDescription)
+			IF(dbo.APFN_ServiceRequestID(@RequestId) <> 0)
 			BEGIN
-
-				DECLARE @RequestId INT, @RequestAmount FLOAT
+				SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+				BEGIN TRANSACTION			
+					INSERT INTO dbo.AP_ServiceMovement(FK_ServiceRequest, Amount, MovementDate, MovementDescription)
+					VALUES (@RequestId, @RealAmount, GETDATE(), @RealDescription)
+					UPDATE dbo.AP_Request SET RequestState = 'Aprobada' FROM dbo.AP_Request R
+						WHERE R.RequestDescription = @oldDescription
+					--Realizar calculo del costo
+					UPDATE dbo.AP_LotXCycle SET	ServicesBalance = ServicesBalance + @RealAmount FROM dbo.AP_Request R
+					inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
+					WHERE  R.RequestDescription = @oldDescription
+				COMMIT
+			END		
+			ELSE IF (dbo.APFN_SupplyRequestID(@RequestId) <> 0)
+			BEGIN
+				SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+				BEGIN TRANSACTION			
+					INSERT INTO dbo.AP_SupplyMovement(FK_SupplyRequest, Amount, MovementDate, MovementDescription)
+					VALUES (@RequestId, @RealAmount, GETDATE(), @RealDescription)		
+					UPDATE dbo.AP_Request SET RequestState = 'Aprobada' FROM dbo.AP_Request R
+						WHERE R.RequestDescription = @oldDescription		
+					UPDATE dbo.AP_LotXCycle SET	SuppliesBalance = SuppliesBalance + @RealAmount FROM dbo.AP_Request R
+					inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID 
+					WHERE  R.RequestDescription = @oldDescription
+				COMMIT
+			END
+			ELSE IF(dbo.APFN_MachineryRequestID(@RequestId) <> 0)
+			BEGIN
 				SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 				BEGIN TRANSACTION
-					SET @RequestId=(SELECT R.ID  FROM dbo.AP_Request R
-												inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
-												inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
-												WHERE R.RequestState ='Pendiente' and  R.RequestDescription=@oldDescription)
-						IF(dbo.APFN_ServiceRequestID(@RequestId)<>0)
-							BEGIN
-								SET @RequestAmount=(SELECT SR.AmountHours  FROM AP_ServiceRequest SR
-													WHERE @RequestId = SR.FK_Service)
-								IF (@RequestAmount >= @RealAmount)
-									BEGIN
-										INSERT INTO dbo.AP_ServiceMovement(FK_ServiceRequest, Amount,MovementDate, MovementDescription)
-										VALUES (@RequestId, @RealAmount,GETDATE(), @RealDescription)
-										
-										UPDATE dbo.AP_LotXCycle SET	ServicesBalance = ServicesBalance + @RealAmount FROM dbo.AP_Request R
-										inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
-										inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
-										WHERE  R.RequestDescription = @oldDescription
-									END
-								ELSE
-									RETURN  0
-							END
-						ELSE IF(dbo.APFN_SupplyRequestID(@RequestId)<>0)
-							BEGIN
-								SET @RequestAmount=(SELECT SR.Amount  FROM AP_SupplyRequest SR
-													WHERE @RequestId = SR.FK_Supply)
-								IF (@RequestAmount >= @RealAmount)
-									BEGIN
-										INSERT INTO dbo.AP_SupplyMovement(FK_SupplyRequest, Amount, MovementDate, MovementDescription)
-										VALUES (@RequestId, @RealAmount,GETDATE(), @RealDescription)
-
-										UPDATE dbo.AP_LotXCycle SET	SuppliesBalance = SuppliesBalance + @RealAmount FROM dbo.AP_Request R
-										inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
-										inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
-										WHERE  R.RequestDescription = @oldDescription
-
-									END
-								ELSE 
-									RETURN 0
-							END
-						ELSE IF(dbo.APFN_MachineryRequestID(@RequestId)<>0)
-							BEGIN
-								SET @RequestAmount=(SELECT MR.AmountHours  FROM AP_MachineryRequest MR
-													WHERE @RequestId = MR.FK_Machinery)
-								IF (@RequestAmount >= @RealAmount)
-									BEGIN
-										INSERT INTO dbo.AP_MachineryMovement(FK_MachineryRequest, Amount, MovementDate, MovementDescription)
-										VALUES (@RequestId, @RealAmount,GETDATE(), @RealDescription)
-
-										UPDATE dbo.AP_LotXCycle SET	MachineryBalance = MachineryBalance + @RealAmount FROM dbo.AP_Request R
-										inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
-										inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
-										WHERE  R.RequestDescription = @oldDescription
-									END
-								ELSE 
-									RETURN 0
-							END
-						ELSE
-							RETURN 0
-				UPDATE dbo.AP_Request SET	RequestState = 'Aprobada' FROM dbo.AP_Request R
+					INSERT INTO dbo.AP_MachineryMovement(FK_MachineryRequest, Amount, MovementDate, MovementDescription)
+					VALUES (@RequestId, @RealAmount, GETDATE(), @RealDescription)		
+					UPDATE dbo.AP_Request SET RequestState = 'Aprobada' FROM dbo.AP_Request R
+						WHERE R.RequestDescription = @oldDescription	
+					UPDATE dbo.AP_LotXCycle SET	MachineryBalance = MachineryBalance + @RealAmount FROM dbo.AP_Request R
 					inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
-					inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
-					WHERE R.RequestState ='Pendiente' and  R.RequestDescription = @oldDescription
+					WHERE  R.RequestDescription = @oldDescription
 				COMMIT
-				RETURN 1
-			END
-				RETURN 0
+			END	
+			RETURN 1		
+		END
+		ELSE
+			RETURN 0
 	END TRY
 	BEGIN CATCH
+		IF @@TRANCOUNT = 1
+			ROLLBACK
 		RETURN @@ERROR * -1
 	END CATCH
 END
@@ -89,14 +69,9 @@ CREATE PROCEDURE dbo.APSP_ApproveRequestView(@LotXCycle int)
 AS
 BEGIN
 	BEGIN TRY
-			BEGIN
-				SELECT R.RequestDescription FROM dbo.AP_Request R
-				inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
-				inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
-				WHERE R.RequestState =	'Pendiente' and Lc.ID= @LotXCycle
-				RETURN 1
-			END
-				RETURN 0
+		SELECT R.RequestDescription FROM dbo.AP_Request R
+			inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
+			WHERE R.RequestState = 'Pendiente' and LC.ID = @LotXCycle
 	END TRY
 	BEGIN CATCH
 		RETURN @@ERROR * -1
