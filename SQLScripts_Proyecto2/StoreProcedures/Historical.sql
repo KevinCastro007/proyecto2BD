@@ -11,7 +11,7 @@ BEGIN
 	BEGIN TRY
 		SELECT DISTINCT CONVERT(VARCHAR(10), H.ActivityDate, 103) AS Date FROM dbo.AP_Historical H
 			inner join dbo.AP_Request R ON R.ID = H.FK_Request
-			WHERE R.FK_LotXCycle = @FK_LotXCycleC
+			WHERE R.FK_LotXCycle = @FK_LotXCycle
 	END TRY
 	BEGIN CATCH 
 		RETURN @@ERROR * -1

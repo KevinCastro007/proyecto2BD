@@ -2,7 +2,7 @@
 lote (en un ciclo específico) en una empresa que administra varias 
 fincas.
 
-+ Solicitud de suministros, servicios o maquinaria: Completo.
++ Solicitud de suministros, servicios o maquinaria (Web app): Completo.
 
 + Aprobación de solicitudes: Parcialmente completo.
 	- Manejo de transacciones de base de datos (actualización de saldos).
@@ -10,17 +10,17 @@ fincas.
 + Historial de las gestiones o actividades que se realizan conforme el
 procedimiento por cada lote: Parcialmente completo.
 	- Administración completa de una finca. Poner a disposición la selección
-	del lote y el ciclo para realizar las operaciones y consultas.
+	del lote y el ciclo para realizar las operaciones y consultas. (Completado)
 	- Cálculo de subtotales de costos por cada actividad, previamente
-	seleccionada como parte del filtro.
+	seleccionada como parte del filtro. (No completado)
 	- Filtro de todas las actividad y cálculos de costos subtotales por los 
-	encargados.
-	- Filtros por tipo de cosecha, rango de fechas, lote o tipos de solicitudes.
+	encargados. (Parcialmente completo)
+	- Filtros por tipo de cosecha, rango de fechas, lote o tipos de solicitudes. (Completado)
 
 Pendiente:
 	+ Realizar cambios correspondientes a la capa lógica (página web), donde
 	se disponga la selección del lote y el ciclo asociados con la finca seleccionada
-	para realizar las operaciones de solicitudes o consulta de información del historial.
+	para realizar las operaciones de solicitudes o consulta de información del historial. (Completado)
 
 
 
