@@ -114,7 +114,7 @@ INSERT INTO dbo.AP_Supply(Name, Cost, Quantity) VALUES('Clavos', 10, 1000)
 INSERT INTO dbo.AP_Supply(Name, Cost, Quantity) VALUES('Destornillador', 1500, 1000)
 
 /* - Insertion in the table Machinery: AP_Machinery - */
-<<<<<<< HEAD
+
 INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Chapulin', 1100)
 INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Arado', 1150)
 INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Cortadora', 1000)
@@ -130,5 +130,4 @@ INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Sierra', 750)
 INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Recolector', 2000)
 INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Bomba de agua', 1750)
 INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Cargador', 1500)
-=======
 

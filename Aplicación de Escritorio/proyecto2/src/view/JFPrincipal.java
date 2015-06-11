@@ -2,6 +2,10 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+ *//*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
  
 package view;
@@ -46,12 +50,22 @@ public class JFPrincipal extends javax.swing.JFrame {
     public void getLots() throws SQLException {
         this.modelLot = new DefaultComboBoxModel();
         this.modelLot.addElement("");
-        ArrayList<String> lotsxcycle = Lot.getInstance().getLots(1);
+        ArrayList<String> lotsxcycle = Lot.getInstance().getLots(jCBProp.getSelectedItem().toString());
         for (String lotxcycle : lotsxcycle) {
             this.modelLot.addElement(lotxcycle);
         }
         this.jCBLot.setModel(modelLot);
     }    
+    
+    public void getProp() throws SQLException {
+        this.modelLot = new DefaultComboBoxModel();
+        this.modelLot.addElement("");
+        ArrayList<String> lotsxcycle = Lot.getInstance().getProps();
+        for (String lotxcycle : lotsxcycle) {
+            this.modelLot.addElement(lotxcycle);
+        }
+        this.jCBProp.setModel(modelLot);
+    } 
     public void getCycle() throws SQLException {
          this.modelLot = new DefaultComboBoxModel();
         this.modelLot.addElement("");
@@ -101,6 +115,8 @@ public class JFPrincipal extends javax.swing.JFrame {
         BtnLoadDates = new javax.swing.JButton();
         jTextStart = new javax.swing.JTextField();
         jTextEnd = new javax.swing.JTextField();
+        jCBProp = new javax.swing.JComboBox();
+        BtnLoadProp = new javax.swing.JButton();
 
         jBtnRegistrarNotas2.setText("Registrar Notas");
         jBtnRegistrarNotas2.setEnabled(false);
@@ -179,6 +195,20 @@ public class JFPrincipal extends javax.swing.JFrame {
         jTextEnd.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         jTextEnd.setEnabled(false);
 
+        jCBProp.setEnabled(false);
+        jCBProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBPropActionPerformed(evt);
+            }
+        });
+
+        BtnLoadProp.setText("Load");
+        BtnLoadProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnLoadPropActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,8 +225,17 @@ public class JFPrincipal extends javax.swing.JFrame {
                                 .addComponent(BtnEntrar)
                                 .addGap(73, 73, 73))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(92, 92, 92)
-                        .addComponent(BtnLoad)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(92, 92, 92)
+                                .addComponent(BtnLoad))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCBProp, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(70, 70, 70)
+                                        .addComponent(BtnLoadProp)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -223,16 +262,22 @@ public class JFPrincipal extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jCBProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(BtnLoadProp)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCBLot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCBIDCycle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel3))
                     .addComponent(BtnLoad)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -245,7 +290,7 @@ public class JFPrincipal extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(31, 31, 31)
                                 .addComponent(BtnEntrar)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtnRegistrar)
                     .addComponent(jBtnDiseñar))
@@ -361,6 +406,22 @@ public class JFPrincipal extends javax.swing.JFrame {
            
     }//GEN-LAST:event_BtnLoadDatesActionPerformed
 
+    private void jCBPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBPropActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBPropActionPerformed
+
+    private void BtnLoadPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLoadPropActionPerformed
+         // Se valida que se escoja un grupo y que este grupo tenga evaluaciones registradas para poder asi registar su nota. 
+        jCBProp.setEnabled(true);
+        try {
+            getProp();
+        } catch (SQLException ex) {
+            Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+           
+    }//GEN-LAST:event_BtnLoadPropActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -402,11 +463,13 @@ public class JFPrincipal extends javax.swing.JFrame {
     public javax.swing.JButton BtnLoad;
     public javax.swing.JButton BtnLoadCycles;
     public javax.swing.JButton BtnLoadDates;
+    public javax.swing.JButton BtnLoadProp;
     private javax.swing.JButton jBtnDiseñar;
     private javax.swing.JButton jBtnRegistrar;
     private javax.swing.JButton jBtnRegistrarNotas2;
     private javax.swing.JComboBox jCBIDCycle;
     private javax.swing.JComboBox jCBLot;
+    private javax.swing.JComboBox jCBProp;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField jTextEnd;
     private javax.swing.JTextField jTextStart;
