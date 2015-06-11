@@ -3,17 +3,19 @@ USE AgriculturalProperty
 GO
 
 -- Procedure for approving a certain request
-CREATE PROCEDURE [dbo].[APSP_ApproveRequest](@oldDescription VARCHAR(200), @RealAmount FLOAT, @RealDescription VARCHAR(50))
+CREATE PROCEDURE dbo.APSP_ApproveRequest(@oldDescription VARCHAR(200), @RealAmount FLOAT, @RealDescription VARCHAR(50))
 AS
 BEGIN
 	BEGIN TRY
 			BEGIN
 
 				DECLARE @RequestId INT, @RequestAmount FLOAT
-				SET @RequestId=(SELECT R.ID  FROM dbo.AP_Request R
-											inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
-											inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
-											WHERE R.RequestState ='Pendiente' and  R.RequestDescription=@oldDescription)
+				SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+				BEGIN TRANSACTION
+					SET @RequestId=(SELECT R.ID  FROM dbo.AP_Request R
+												inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
+												inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
+												WHERE R.RequestState ='Pendiente' and  R.RequestDescription=@oldDescription)
 						IF(dbo.APFN_ServiceRequestID(@RequestId)<>0)
 							BEGIN
 								SET @RequestAmount=(SELECT SR.AmountHours  FROM AP_ServiceRequest SR
@@ -72,6 +74,7 @@ BEGIN
 					inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
 					inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
 					WHERE R.RequestState ='Pendiente' and  R.RequestDescription = @oldDescription
+				COMMIT
 				RETURN 1
 			END
 				RETURN 0
@@ -82,7 +85,7 @@ BEGIN
 END
 GO
 -- Procedure for viewing the possible requests that aren't approve
-CREATE PROCEDURE [dbo].[APSP_ApproveRequestView](@LotXCycle int)
+CREATE PROCEDURE dbo.APSP_ApproveRequestView(@LotXCycle int)
 AS
 BEGIN
 	BEGIN TRY
@@ -102,7 +105,7 @@ END
 
 GO
 -- Procedure for modifing a request
-CREATE PROCEDURE [dbo].[APSP_ModifyRequest](@oldDescription VARCHAR(200), @Description VARCHAR(200), @RequestType VARCHAR(50), @Amount FLOAT)
+CREATE PROCEDURE dbo.APSP_ModifyRequest(@oldDescription VARCHAR(200), @Description VARCHAR(200), @RequestType VARCHAR(50), @Amount FLOAT)
 AS
 BEGIN
 	BEGIN TRY
@@ -166,7 +169,7 @@ END
 GO
 
 -- Procedure for returning the Description of a certain request by it's lot code and cycle code
-CREATE Procedure [dbo].[APSP_RequestDescription](@CodeLot VARCHAR(50),@Cycle VARCHAR(50) )
+CREATE Procedure dbo.APSP_RequestDescription(@CodeLot VARCHAR(50),@Cycle VARCHAR(50) )
 AS
 	BEGIN
 		SELECT R.RequestDescription FROM dbo.AP_Request R

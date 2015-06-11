@@ -78,7 +78,7 @@ public class LotXCycle {
     // y una clave como parámetros.
     public boolean validate(String pLot, String pCycle) throws SQLException {
         rs = this.stm.executeQuery(String.format("SELECT Result = "
-                + "dbo.APFN_LotXCycl3 ('%s', '%s')", pLot, pCycle));
+                + "dbo.APFN_LotXCycle('%s', '%s')", pLot, pCycle));
         String result = "";
         while (rs.next()) {
             result = (rs.getString("Result"));

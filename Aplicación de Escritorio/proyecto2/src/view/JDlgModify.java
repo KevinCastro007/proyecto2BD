@@ -77,6 +77,7 @@ public class JDlgModify extends javax.swing.JDialog {
         this.modelLotXcyle.addElement("");
         if (LotXCycle.getInstance().validatemodify(jCBDescription.getSelectedItem().toString(), jTextModDescription.getText(),jTextModRequest.getText(), Float.parseFloat(jTextModAmount.getText()))){
             LotXCycle.getInstance().modifyRequest(jCBDescription.getSelectedItem().toString(), jTextModDescription.getText(),jTextModRequest.getText(), Float.parseFloat(jTextModAmount.getText()));
+            System.out.println(Float.parseFloat(jTextModAmount.getText()));
             return true;
         }
         return false;
