@@ -80,23 +80,45 @@ END
 
 GO
 -- Procedure for modifing a request
-CREATE PROCEDURE dbo.APSP_ModifyRequest(@oldDescription VARCHAR(200), @Description VARCHAR(200), @RequestType VARCHAR(50), @Amount FLOAT)
+CREATE PROCEDURE dbo.APSP_ModifyRequest(@oldDescription VARCHAR(200), @Name VARCHAR(50), @ActivityType VARCHAR(50), @Amount FLOAT)
 AS
 BEGIN
 	BEGIN TRY
 			BEGIN
-				IF (@Description <> '')
+				IF (@Name <> '')
 					BEGIN
-						UPDATE dbo.AP_Request SET RequestDescription = @Description FROM dbo.AP_Request R
-						inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
-						inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
-						WHERE  R.RequestDescription = @oldDescription
+						DECLARE @RequestId INT
+							SET @RequestId=(SELECT R.ID  FROM dbo.AP_Request R
+												inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
+												inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
+												WHERE  R.RequestDescription = @oldDescription)
+							IF(dbo.APFN_ServiceRequestID(@RequestId)<>0)
+								BEGIN
+									UPDATE dbo.AP_ServiceRequest SET FK_Service = dbo.APFN_RequestID(@Name,@oldDescription) 
+										FROM dbo.AP_ServiceRequest SR
+										WHERE SR.ID = @RequestId
+								END
+							ELSE IF(dbo.APFN_SupplyRequestID(@RequestId)<>0)
+								BEGIN
+									UPDATE dbo.AP_SupplyRequest SET FK_Supply = dbo.APFN_RequestID(@Name,@oldDescription) 
+									FROM dbo.AP_SupplyRequest SR
+									WHERE SR.ID = @RequestId
+								END
+							ELSE IF(dbo.APFN_MachineryRequestID(@RequestId)<>0)
+								BEGIN
+									UPDATE dbo.AP_MachineryRequest SET FK_Machinery = dbo.APFN_RequestID(@Name,@oldDescription) 
+									FROM dbo.AP_MachineryRequest MR
+									WHERE MR.ID = @RequestId
+								END
+							ELSE
+								RETURN 0
+
 					END
-				IF (@RequestType <> '')
+				IF (@ActivityType <> '')
 					BEGIN
-						IF (dbo.APFN_RequestTypeID(@RequestType)<>0)
+						IF (dbo.APFN_ActivityTypeID(@ActivityType)<>0)
 							BEGIN
-							UPDATE dbo.AP_Request SET FK_RequestType = dbo.APFN_RequestTypeID(@RequestType) FROM dbo.AP_Request R
+							UPDATE dbo.AP_Request SET FK_ActivityType = dbo.APFN_ActivityTypeID(@ActivityType) FROM dbo.AP_Request R
 							inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
 							inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
 							WHERE  R.RequestDescription = @oldDescription
@@ -104,28 +126,28 @@ BEGIN
 					END
 				IF (@Amount <> '')
 					BEGIN
-					DECLARE @RequestId INT
-							SET @RequestId=(SELECT R.ID  FROM dbo.AP_Request R
+					DECLARE @RequestIdAmount INT
+							SET @RequestIdAmount=(SELECT R.ID  FROM dbo.AP_Request R
 												inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
 												inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
 												WHERE  R.RequestDescription = @oldDescription)
-							IF(dbo.APFN_ServiceRequestID(@RequestId)<>0)
+							IF(dbo.APFN_ServiceRequestID(@RequestIdAmount)<>0)
 								BEGIN
 									UPDATE dbo.AP_ServiceRequest SET AmountHours=@Amount 
 										FROM dbo.AP_ServiceRequest SR
-										WHERE SR.FK_Service = @RequestId
+										WHERE SR.ID = @RequestIdAmount
 								END
-							ELSE IF(dbo.APFN_SupplyRequestID(@RequestId)<>0)
+							ELSE IF(dbo.APFN_SupplyRequestID(@RequestIdAmount)<>0)
 								BEGIN
 									UPDATE dbo.AP_SupplyRequest SET Amount=@Amount 
 									FROM dbo.AP_SupplyRequest SR
-									WHERE SR.FK_Supply = @RequestId
+									WHERE SR.ID = @RequestIdAmount
 								END
-							ELSE IF(dbo.APFN_MachineryRequestID(@RequestId)<>0)
+							ELSE IF(dbo.APFN_MachineryRequestID(@RequestIdAmount)<>0)
 								BEGIN
 									UPDATE dbo.AP_MachineryRequest SET AmountHours=@Amount 
 									FROM dbo.AP_MachineryRequest MR
-									WHERE MR.FK_Machinery = @RequestId
+									WHERE MR.ID = @RequestIdAmount
 								END
 							ELSE
 								RETURN 0
@@ -150,6 +172,34 @@ AS
 		SELECT R.RequestDescription FROM dbo.AP_Request R
 		inner join dbo.AP_LotXCycle L ON R.FK_LotXCycle = L.ID
 		WHERE L.FK_Cycle = dbo.APFN_Cycle(@Cycle) and L.FK_Lot = dbo.APFN_LotID(@CodeLot) and R.RequestState = 'Pendiente'
+	END
+GO
+
+-- Procedure for returning the Description of a certain request by it's lot code and cycle code
+CREATE Procedure dbo.APSP_RequestNames(@Description VARCHAR(200) )
+AS
+	BEGIN
+		DECLARE @RequestId INT
+							SET @RequestId=(SELECT R.ID  FROM dbo.AP_Request R
+												inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
+												inner join dbo.AP_Cycle C ON C.ID= LC.FK_Cycle
+												WHERE  R.RequestDescription = @Description)
+		
+				IF(dbo.APFN_ServiceRequestID(@RequestId)<>0)
+						BEGIN
+							SELECT S.Name  FROM dbo.AP_Service S
+							
+						END
+				ELSE IF(dbo.APFN_SupplyRequestID(@RequestId)<>0)
+						BEGIN
+							SELECT S.Name  FROM dbo.AP_Supply S
+						END
+				ELSE IF(dbo.APFN_MachineryRequestID(@RequestId)<>0)
+						BEGIN
+							SELECT M.Name  FROM dbo.AP_Machinery M
+						END
+				ELSE
+					RETURN 0
 	END
 GO
 

@@ -72,12 +72,31 @@ public class JDlgModify extends javax.swing.JDialog {
         this.jCBDescription.setModel(modelLotXcyle);
     } 
     
+    public void getActivityType() throws SQLException {
+        this.modelLotXcyle = new DefaultComboBoxModel();
+        this.modelLotXcyle.addElement("");
+        ArrayList<String> lotsxcycle = LotXCycle.getInstance().getActivityType(1);
+        for (String lotxcycle : lotsxcycle) {
+            this.modelLotXcyle.addElement(lotxcycle);
+        }
+        this.jCBActivityType.setModel(modelLotXcyle);
+    } 
+    public void getRequetName() throws SQLException {
+        this.modelLotXcyle = new DefaultComboBoxModel();
+        this.modelLotXcyle.addElement("");
+        ArrayList<String> lotsxcycle = LotXCycle.getInstance().getRequestName(jCBDescription.getSelectedItem().toString());
+        for (String lotxcycle : lotsxcycle) {
+            this.modelLotXcyle.addElement(lotxcycle);
+        }
+        this.jCBRequestName.setModel(modelLotXcyle);
+    } 
+    
     public boolean modifyRequest()throws SQLException {
         this.modelLotXcyle = new DefaultComboBoxModel();
         this.modelLotXcyle.addElement("");
-        if (LotXCycle.getInstance().validatemodify(jCBDescription.getSelectedItem().toString(), jTextModDescription.getText(),jTextModRequest.getText(), Float.parseFloat(jTextModAmount.getText()))){
-            LotXCycle.getInstance().modifyRequest(jCBDescription.getSelectedItem().toString(), jTextModDescription.getText(),jTextModRequest.getText(), Float.parseFloat(jTextModAmount.getText()));
-            System.out.println(Float.parseFloat(jTextModAmount.getText()));
+        if (LotXCycle.getInstance().validatemodify(jCBDescription.getSelectedItem().toString(), jCBRequestName.getSelectedItem().toString() ,jCBActivityType.getSelectedItem().toString(), Float.parseFloat(jTextModAmount.getText()))){
+            LotXCycle.getInstance().modifyRequest(jCBDescription.getSelectedItem().toString(), jCBRequestName.getSelectedItem().toString(),jCBActivityType.getSelectedItem().toString(), Float.parseFloat(jTextModAmount.getText()));
+            System.out.println(jCBActivityType.getSelectedItem().toString());
             return true;
         }
         return false;
@@ -94,33 +113,31 @@ public class JDlgModify extends javax.swing.JDialog {
         jCBDescription = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jTextModAmount = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextModDescription = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jTextModRequest = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jBtnRegistrar = new javax.swing.JButton();
+        jCBActivityType = new javax.swing.JComboBox();
+        jLabel7 = new javax.swing.JLabel();
+        jCBRequestName = new javax.swing.JComboBox();
+        jLabel8 = new javax.swing.JLabel();
+        jBtnLoad = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Modify");
         setResizable(false);
+
+        jCBDescription.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBDescriptionActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Monto:");
 
         jTextModAmount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jTextModAmount.setText("0");
 
-        jLabel4.setText("Descripcion:");
-
-        jTextModDescription.setColumns(20);
-        jTextModDescription.setRows(5);
-        jScrollPane1.setViewportView(jTextModDescription);
-
         jLabel5.setText("Descripcion:");
-
-        jLabel6.setText("Tipo de solicitud:");
 
         jLabel1.setText("-----------------------------------Campos a modificar---------------------------");
 
@@ -131,71 +148,97 @@ public class JDlgModify extends javax.swing.JDialog {
             }
         });
 
+        jCBActivityType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBActivityTypeActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("ActivityType:");
+
+        jCBRequestName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBRequestNameActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Request Name:");
+
+        jBtnLoad.setText("Load");
+        jBtnLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnLoadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addComponent(jLabel5)
-                                .addGap(48, 48, 48)
-                                .addComponent(jCBDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(37, 37, 37)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3))
-                                .addGap(18, 18, 18)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel7))
+                                .addGap(34, 34, 34)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(42, 42, 42)
-                                        .addComponent(jBtnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jCBActivityType, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(26, 26, 26)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextModRequest, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTextModAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                        .addGap(0, 58, Short.MAX_VALUE))
+                                        .addComponent(jTextModAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jBtnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(jCBRequestName, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(2, 2, 2)))
+                        .addGap(0, 41, Short.MAX_VALUE))
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jBtnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(48, 48, 48)
+                        .addComponent(jCBDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCBDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
+                .addComponent(jBtnLoad)
+                .addGap(27, 27, 27)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCBActivityType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jTextModAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jLabel6))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextModRequest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBtnRegistrar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)))
-                .addGap(14, 14, 14))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCBRequestName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(36, 36, 36)
+                .addComponent(jBtnRegistrar)
+                .addGap(69, 69, 69))
         );
 
         pack();
@@ -216,6 +259,30 @@ public class JDlgModify extends javax.swing.JDialog {
         }
         this.setVisible(false);
     }//GEN-LAST:event_jBtnRegistrarActionPerformed
+
+    private void jCBDescriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBDescriptionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBDescriptionActionPerformed
+
+    private void jCBActivityTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBActivityTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBActivityTypeActionPerformed
+
+    private void jCBRequestNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBRequestNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBRequestNameActionPerformed
+
+    private void jBtnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLoadActionPerformed
+        if (jCBDescription.getSelectedItem().toString().isEmpty()){
+            JOptionPane.showMessageDialog(rootPane, "Seleccione una opcion de descripcion");
+        } else {
+            try {
+                this.getRequetName();
+            } catch (SQLException ex) {
+                Logger.getLogger(JDlgModify.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jBtnLoadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -263,16 +330,16 @@ public class JDlgModify extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBtnLoad;
     private javax.swing.JButton jBtnRegistrar;
+    private javax.swing.JComboBox jCBActivityType;
     private javax.swing.JComboBox jCBDescription;
+    private javax.swing.JComboBox jCBRequestName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JTextField jTextModAmount;
-    private javax.swing.JTextArea jTextModDescription;
-    private javax.swing.JTextField jTextModRequest;
     // End of variables declaration//GEN-END:variables
 }
