@@ -101,8 +101,6 @@ CREATE TABLE AP_Request
 	CONSTRAINT FK_LotXCycle FOREIGN KEY(FK_LotXCycle) REFERENCES AP_LotXCycle(ID),
 	FK_RequestType INT not null,
 	CONSTRAINT FK_RequestType FOREIGN KEY(FK_RequestType) REFERENCES AP_RequestType(ID),
-	FK_RequestManager INT not null,
-	CONSTRAINT FK_RequestManager FOREIGN KEY(FK_RequestManager) REFERENCES AP_Manager(ID),			
 	FK_Attendant INT not null,
 	CONSTRAINT FK_Attendant FOREIGN KEY(FK_Attendant) REFERENCES AP_Attendant(ID),	
 	FK_ActivityType INT not null,

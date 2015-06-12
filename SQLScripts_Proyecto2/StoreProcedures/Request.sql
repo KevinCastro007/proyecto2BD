@@ -8,7 +8,7 @@ CREATE PROCEDURE APSP_InsertRequest(@FK_LotXCycle INT,  @FK_ActivityType INT, @F
 AS
 BEGIN
 	BEGIN TRY
-		IF (dbo.APFN_RequestTypeID(@RequestType) <> 0 and dbo.APFN_RequestTypeManagerID(@RequestType) <> 0 and @Amount > 0) 
+		IF (dbo.APFN_RequestTypeID(@RequestType) <> 0 and @Amount > 0) 
 		BEGIN
 			DECLARE @RequestID INT
 			IF (@RequestType = 'Servicio')
@@ -17,7 +17,7 @@ BEGIN
 				BEGIN	
 					DECLARE @ServiceRequestDescription VARCHAR(150), @ServiceHistoricalDescription VARCHAR(150)
 					SELECT @ServiceRequestDescription =  'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
-						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_ServiceID(@Request))  + CONVERT(VARCHAR(10), ISNULL(MAX(SR.ID), 0) + 1) 
+						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_ServiceID(@Request))
 						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 						FROM dbo.AP_ServiceRequest SR
 					SET @ServiceHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + ': ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
@@ -30,8 +30,8 @@ BEGIN
 							WHERE LC.ID = @FK_LotXCycle
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
-								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @ServiceRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @FK_Attendant, @FK_ActivityType, @ServiceRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()				
 							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
 								VALUES(@RequestID, GETDATE(), @ServiceHistoricalDescription)			
@@ -48,8 +48,8 @@ BEGIN
 					BEGIN
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
-								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @ServiceRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @FK_Attendant, @FK_ActivityType, @ServiceRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()				
 							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
 								VALUES(@RequestID, GETDATE(), @ServiceHistoricalDescription)			
@@ -68,7 +68,7 @@ BEGIN
 				BEGIN
 					DECLARE @SupplyRequestDescription VARCHAR(150), @SupplyHistoricalDescription VARCHAR(150)
 					SELECT @SupplyRequestDescription = 'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
-						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_SupplyID(@Request))  + CONVERT(VARCHAR(10),  ISNULL(MAX(SR.ID), 0) + 1) 
+						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_SupplyID(@Request))
 						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '.' 
 						FROM dbo.AP_SupplyRequest SR
 					SET @SupplyHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + ': ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '.'
@@ -81,8 +81,8 @@ BEGIN
 							WHERE LC.ID = @FK_LotXCycle
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
-								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @SupplyRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @FK_Attendant, @FK_ActivityType, @SupplyRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()	
 							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
 								VALUES(@RequestID, GETDATE(), @SupplyHistoricalDescription)				
@@ -102,8 +102,8 @@ BEGIN
 					BEGIN
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
-								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @SupplyRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @FK_Attendant, @FK_ActivityType, @SupplyRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()				
 							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
 								VALUES(@RequestID, GETDATE(), @SupplyHistoricalDescription)				
@@ -122,7 +122,7 @@ BEGIN
 				BEGIN
 					DECLARE @MachineryRequestDescription VARCHAR(150), @MachineryHistoricalDescription VARCHAR(150)
 					SELECT @MachineryRequestDescription = 'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
-						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_MachineryID(@Request))  + CONVERT(VARCHAR(10),  ISNULL(MAX(MR.ID), 0) + 1)
+						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_MachineryID(@Request))
 						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 						FROM dbo.AP_MachineryRequest MR
 					SET @MachineryHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + ': ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
@@ -135,8 +135,8 @@ BEGIN
 							WHERE LC.ID = @FK_LotXCycle
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
-								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @MachineryRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @FK_Attendant, @FK_ActivityType, @MachineryRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()				
 							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
 								VALUES(@RequestID, GETDATE(), @MachineryHistoricalDescription)		
@@ -153,8 +153,8 @@ BEGIN
 					BEGIN
 						SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 						BEGIN TRANSACTION
-							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_RequestManager, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
-								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), dbo.APFN_RequestTypeManagerID(@RequestType), @FK_Attendant, @FK_ActivityType, @MachineryRequestDescription, @State)
+							INSERT INTO dbo.AP_Request(FK_LotXCycle, FK_RequestType, FK_Attendant, FK_ActivityType, RequestDescription, RequestState) 
+								VALUES(@FK_LotXCycle, dbo.APFN_RequestTypeID(@RequestType), @FK_Attendant, @FK_ActivityType, @MachineryRequestDescription, @State)
 							SET @RequestID = SCOPE_IDENTITY()				
 							INSERT INTO dbo.AP_Historical(FK_Request, ActivityDate, ActivityDescription)
 								VALUES(@RequestID, GETDATE(), @MachineryHistoricalDescription)			
