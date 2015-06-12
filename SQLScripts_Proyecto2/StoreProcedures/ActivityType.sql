@@ -20,3 +20,17 @@ BEGIN
 		RETURN @@ERROR * -1
 	END CATCH
 END
+
+GO
+CREATE PROCEDURE APSP_ActivityType(@Type int)
+AS
+BEGIN
+	BEGIN TRY
+		Select  AT.Name from dbo.AP_ActivityType AT
+		RETURN 1
+	END TRY
+	BEGIN CATCH
+		RETURN @@ERROR * -1
+	END CATCH
+END
+

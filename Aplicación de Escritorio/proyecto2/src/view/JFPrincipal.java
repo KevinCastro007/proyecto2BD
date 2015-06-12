@@ -330,6 +330,8 @@ public class JFPrincipal extends javax.swing.JFrame {
             modify.setCycleCode(jCBIDCycle.getSelectedItem().toString());
         try {
             modify.getDescrip();
+            modify.getActivityType();
+            
             
         } catch (SQLException ex) {
             Logger.getLogger(JFPrincipal.class.getName()).log(Level.SEVERE, null, ex);

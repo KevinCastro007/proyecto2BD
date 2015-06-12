@@ -51,7 +51,25 @@ public class LotXCycle {
             grupos.add(rs.getString("RequestDescription"));
         }
         return grupos;
-    }    
+    } 
+    
+    public ArrayList<String> getActivityType(Integer pActivity) throws SQLException {
+        ArrayList<String> grupos = new ArrayList<>();
+        rs = this.stm.executeQuery(String.format("dbo.APSP_ActivityType '%s'", pActivity));
+        while (rs.next()) {
+            grupos.add(rs.getString("Name"));
+        }
+        return grupos;
+    }  
+    
+    public ArrayList<String> getRequestName(String pDescription) throws SQLException {
+        ArrayList<String> grupos = new ArrayList<>();
+        rs = this.stm.executeQuery(String.format("dbo.APSP_RequestNames '%s'", pDescription));
+        while (rs.next()) {
+            grupos.add(rs.getString("Name"));
+        }
+        return grupos;
+    }  
     
    public boolean validateapprove(String pOldDesc, Float prealAmount,String pRealDesc) throws SQLException {
         rs = this.stm.executeQuery(String.format("SELECT Result = dbo.APFN_ApproveRequestVerify('%s', '%s', '%s')", pOldDesc, prealAmount, pRealDesc));
