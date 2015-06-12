@@ -8,35 +8,12 @@ GO
 CREATE PROCEDURE APSP_Properties
 AS
 BEGIN
-	BEGIN TRY
-		SELECT P.ID, P.Name FROM dbo.AP_Property P
-	END TRY
-	BEGIN CATCH 
-		RETURN @@ERROR * -1
-	END CATCH
+	SELECT P.ID, P.Name FROM dbo.AP_Property P
 END
+
 GO 
 CREATE PROCEDURE APSP_Propertiesname
 AS
 BEGIN
-	BEGIN TRY
-		SELECT P.Name FROM dbo.AP_Property P
-	END TRY
-	BEGIN CATCH 
-		RETURN @@ERROR * -1
-	END CATCH
-END
-GO
-
-
-
-CREATE PROCEDURE APSP_InsertProperty(@Name VARCHAR(50))
-AS
-BEGIN
-	IF (dbo.APFN_PropertyID(@Name) = 0) 
-	BEGIN
-		INSERT INTO dbo.AP_Property(Name) VALUES(@Name)
-		RETURN 1
-	END
-	RETURN 0
+	SELECT P.Name FROM dbo.AP_Property P
 END

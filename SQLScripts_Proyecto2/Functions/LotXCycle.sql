@@ -15,10 +15,10 @@ BEGIN
 		WHERE L.FK_Cycle = @FK_Cycle and L.FK_Lot = @FK_Lot
 	RETURN @Result
 END
-GO
 
+GO
 -- Function for returning the ID of a Lot X Cycle by its lot and cycle
-CREATE FUNCTION dbo.APFN_LotXCycle(@Lot VARCHAR(50), @Cycle VARCHAR(50))
+CREATE FUNCTION APFN_LotXCycle(@Lot VARCHAR(50), @Cycle VARCHAR(50))
 RETURNS INT
 AS
 BEGIN
@@ -28,4 +28,3 @@ BEGIN
 		WHERE L.FK_Cycle = dbo.APFN_Cycle(@Cycle) and L.FK_Lot = dbo.APFN_LotID(@Lot)
 	RETURN @Result
 END
-GO

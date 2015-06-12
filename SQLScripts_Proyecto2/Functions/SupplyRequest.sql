@@ -1,4 +1,4 @@
-USE [AgriculturalProperty]
+USE AgriculturalProperty
 GO
 
 -- Function for returning the ID of a SupplyRequest with an ID as parameter

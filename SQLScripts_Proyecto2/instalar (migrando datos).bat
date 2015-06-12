@@ -22,7 +22,6 @@ sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\ActivityType.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Attendant.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\CropType.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Cycle.sql
-sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\DepartmentManager.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Historical.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Lot.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\LotXCycle.sql

@@ -88,9 +88,9 @@ CREATE TABLE AP_LotXCycle
 	ServicesBalance FLOAT not null,
 	SuppliesBalance FLOAT not null,
 	MachineryBalance FLOAT not null,	
-	PostBy VARCHAR(50),
-	PostDate DATE,
-	PostIn VARCHAR(50)
+	UpdateBy VARCHAR(50),
+	UpdateDate DATE,
+	UpdateIn VARCHAR(50)
 )
 
 GO
@@ -106,10 +106,10 @@ CREATE TABLE AP_Request
 	FK_ActivityType INT not null,
 	CONSTRAINT FK_ActivityType FOREIGN KEY(FK_ActivityType) REFERENCES AP_ActivityType(ID),	
 	RequestDescription VARCHAR(150) not null,
-	RequestState VARCHAR(50) not null,
-	PostBy VARCHAR(50),
-	PostDate DATE,
-	PostIn VARCHAR(50)	
+	RequestState VARCHAR(50) not null,	
+	UpdateBy VARCHAR(50),
+	UpdateDate DATE,
+	UpdateIn VARCHAR(50)
 )
 
 GO
@@ -135,8 +135,7 @@ CREATE TABLE AP_Supply
 (
 	ID INT IDENTITY(1, 1) PRIMARY KEY not null,
 	Name VARCHAR(50) not null,
-	Cost FLOAT not null,
-	Quantity FLOAT not null
+	Cost FLOAT not null
 )
 
 GO
