@@ -18,9 +18,66 @@ procedimiento por cada lote: Parcialmente completo.
 	- Filtros por tipo de cosecha, rango de fechas, lote o tipos de solicitudes. (Completado)
 
 Pendiente:
-	+ Realizar cambios correspondientes a la capa lógica (página web), donde
-	se disponga la selección del lote y el ciclo asociados con la finca seleccionada
-	para realizar las operaciones de solicitudes o consulta de información del historial. (Completado)
+	+ Estado de  la última gestión realizada.
+
+	+ Filtro de costos por actividad(es), cálculo de subtotales.
+
+	+ Generalizar consulta para la información de la finca, en rango de fechas.
+
+	+ Migración:
+		+ Transacción
+			- Fincas
+			- Crop Type
+			- Cycle
+			- Attendants
+			- Activity Type
+			- Servicios
+			- Maquinaria
+			- Suministros
+			- Lotes
+			- Lote X Ciclo
+			- Request
+				Service
+				Machinery
+				Supply
+			- Historical
+			- Movimientos
+				Service
+				Machinery
+				Supply
+			- Actualización de saldos
+
+	+ App Escritorio:
+		+ Modificar requests
+			- Tipo de Actividad
+			- Cantidad
+			- Solicitud
+
+		+ Aprobar requests (Transacción)
+			- Actualización del Estado
+			- Cargar Movimiento (Inserción)
+				- Actualización de saldos
+
+	+ Blog:
+		+ Migración
+			- Parseo de información
+			- Transacción de BD
+			- Conflictos (Modificaciones)
+
+		+ Filtros
+			- Manejo de nulos
+
+		+ Afinación de detalles (Estructuración de código)
+
+		+ Análisis final de resultados (Recuento de horas)
+
+
+
+
+
+
+		
+
 
 
 

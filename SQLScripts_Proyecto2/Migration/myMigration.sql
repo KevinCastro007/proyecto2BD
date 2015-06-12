@@ -29,7 +29,7 @@ BEGIN
 		DECLARE @Cycle TABLE(ID INT IDENTITY(1,1), StartDate VARCHAR(10), EndDate VARCHAR(10))
 		DECLARE @ActivityType TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50))
 		DECLARE @Service TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50), Cost FLOAT)
-		DECLARE @Supply TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50), Cost FLOAT)
+		DECLARE @Supply TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50), Cost FLOAT, Quantity FLOAT)
 		DECLARE @Machinery TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50), Cost FLOAT)
 		DECLARE @AttendantTemp TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50))
 		DECLARE @Attendant TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50))
@@ -37,11 +37,11 @@ BEGIN
 		DECLARE @LotXCycle TABLE(ID INT IDENTITY(1,1), FK_Lot INT, FK_Cycle INT, FK_CropType INT)
 		DECLARE @Request TABLE(ID INT IDENTITY(1, 1), FK_LotXCycle INT, FK_RequestType INT, FK_Attendant INT, FK_ActivityType INT, 
 			RequestDescription VARCHAR(150), RequestState VARCHAR(50), RequestDate VARCHAR(10), TransactionDate VARCHAR(10))
-		DECLARE @ServiceRequest TABLE(ID INT, FK_Service INT, AmountHours FLOAT)
-		DECLARE @MachineryRequest TABLE(ID INT, FK_Machinery INT, AmountHours FLOAT)
-		DECLARE @SupplyRequest TABLE(ID INT, FK_Supply INT, Amount FLOAT)
+		DECLARE @ServiceRequest TABLE(ID INT, FK_Service INT, AmountHours FLOAT, Cost FLOAT)
+		DECLARE @MachineryRequest TABLE(ID INT, FK_Machinery INT, AmountHours FLOAT, Cost FLOAT)
+		DECLARE @SupplyRequest TABLE(ID INT, FK_Supply INT, Amount FLOAT, Cost FLOAT)
 
-		DECLARE @Historical TABLE(FK_Request INT, ActivityDate DATE, ActivityDescription VARCHAR(150))
+		DECLARE @Historical TABLE(FK_Request INT, ActivityDate VARCHAR(10), ActivityDescription VARCHAR(150))
 		DECLARE @ServiceMovement TABLE(FK_ServiceRequest INT, Amount FLOAT, MovementDate VARCHAR(10), MovementDescription VARCHAR(150))
 		DECLARE @MachineryMovement TABLE(FK_MachineryRequest INT, Amount FLOAT, MovementDate VARCHAR(10), MovementDescription VARCHAR(150))
 		DECLARE @SupplyMovement TABLE(FK_SupplyRequest INT, Amount FLOAT, MovementDate VARCHAR(10), MovementDescription VARCHAR(150))
@@ -206,12 +206,13 @@ BEGIN
 		cross apply x3.farm.nodes('./lot') AS x4(lot)
 		cross apply x4.lot.nodes('./activity') AS x5(activity)
 		cross apply x5.activity.nodes('./service') AS x6(service)
-		INSERT INTO @ServiceRequest(ID, FK_Service, AmountHours)
+		INSERT INTO @ServiceRequest(ID, FK_Service, AmountHours, Cost)
 		SELECT 
 			NEXT value FOR APSQ_Count,
 			(SELECT S.ID FROM @Service S
 				WHERE S.Name = service.value('@name', 'VARCHAR(50)')),
-			service.value('@duration', 'VARCHAR(50)')
+			service.value('@duration', 'VARCHAR(50)'),
+			(CONVERT(FLOAT, service.value('@duration', 'VARCHAR(50)')) * CONVERT(FLOAT, service.value('@costPerHour', 'VARCHAR(50)')))
 		FROM @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
@@ -260,12 +261,13 @@ BEGIN
 		cross apply x3.farm.nodes('./lot') AS x4(lot)
 		cross apply x4.lot.nodes('./activity') AS x5(activity)
 		cross apply x5.activity.nodes('./machinery') AS x6(machinery)
-		INSERT INTO @MachineryRequest(ID, FK_Machinery, AmountHours)
+		INSERT INTO @MachineryRequest(ID, FK_Machinery, AmountHours, Cost)
 		SELECT 
 			(NEXT value FOR APSQ_Count) + @MaxRequest,
 			(SELECT M.ID FROM @Machinery M
 				WHERE M.Name = machinery.value('@name', 'VARCHAR(50)')),
-			machinery.value('@duration', 'VARCHAR(50)')
+			machinery.value('@duration', 'VARCHAR(50)'),
+			(CONVERT(FLOAT, machinery.value('@duration', 'VARCHAR(50)')) * CONVERT(FLOAT, machinery.value('@costPerHour', 'VARCHAR(50)')))
 		FROM    @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
@@ -314,47 +316,104 @@ BEGIN
 		cross apply x3.farm.nodes('./lot') AS x4(lot)
 		cross apply x4.lot.nodes('./activity') AS x5(activity)
 		cross apply x5.activity.nodes('./supply') AS x6(supply)
-		INSERT INTO @SupplyRequest(ID, FK_Supply, Amount)
+		INSERT INTO @SupplyRequest(ID, FK_Supply, Amount, Cost)
 		SELECT 
 			(NEXT value FOR APSQ_Count) + @MaxRequest,
 			(SELECT S.ID FROM @Supply S
 				WHERE S.Name = supply.value('@name', 'VARCHAR(50)')),
-			supply.value('@units', 'VARCHAR(50)')
+			supply.value('@units', 'VARCHAR(50)'),
+			(CONVERT(FLOAT, supply.value('@units', 'VARCHAR(50)')) * CONVERT(FLOAT, supply.value('@costPerUnit', 'VARCHAR(50)')))
 		FROM @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
 		cross apply x3.farm.nodes('./lot') AS x4(lot)
 		cross apply x4.lot.nodes('./activity') AS x5(activity)
 		cross apply x5.activity.nodes('./supply') AS x6(supply)
-		
-		/*select * from @Request
-		select * from @ServiceRequest
-		select * from @MachineryRequest
-		select * from @SupplyRequest*/
 
-		/*INSERT INTO @Historical(FK_Request, ActivityDate, ActivityDescription)
+		INSERT INTO @Historical(FK_Request, ActivityDate, ActivityDescription)
 		SELECT 
 			R.ID,
 			R.RequestDate,
-			R.RequestDescription
+			'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. '  + R.RequestDescription
 		FROM @Request R
-		select * from @Historical*/
 
 		INSERT INTO @ServiceMovement(FK_ServiceRequest, Amount, MovementDate, MovementDescription)
 		SELECT 
 			SR.ID,
-			SR.AmountHours,
+			SR.Cost,
 			R.TransactionDate,
-			'Fecha de proceso: ' + R.TransactionDate + '. ' + R.RequestDescription + ' Nuevo saldo de servicios: (CALCULAR)' 
-			/*+ CONVERT(VARCHAR(200), (LC.ServicesBalance + dbo.APFN_ServiceCost(@Request) * @Amount))*/
+			'Fecha de proceso: ' + R.TransactionDate + '. ' + R.RequestDescription + ' Costo: ' +  
+			CONVERT(VARCHAR(50), SR.Cost)
 		FROM @ServiceRequest SR
 		inner join @Request R ON R.ID = SR.ID
 		WHERE R.RequestState = 'Approved'
 
-		select * from @ServiceMovement
-		
-		--select * FROM @ServiceMovement
+		INSERT INTO @MachineryMovement(FK_MachineryRequest, Amount, MovementDate, MovementDescription)
+		SELECT 
+			MR.ID,
+			MR.Cost,
+			R.TransactionDate,
+			'Fecha de proceso: ' + R.TransactionDate + '. ' + R.RequestDescription + ' Costo: ' +  
+			CONVERT(VARCHAR(50), MR.Cost)
+		FROM @MachineryRequest MR
+		inner join @Request R ON R.ID = MR.ID
+		WHERE R.RequestState = 'Approved'
 
+		INSERT INTO @SupplyMovement(FK_SupplyRequest, Amount, MovementDate, MovementDescription)
+		SELECT 
+			SR.ID,
+			SR.Cost,
+			R.TransactionDate,
+			'Fecha de proceso: ' + R.TransactionDate + '. ' + R.RequestDescription + ' Costo: ' +  
+			CONVERT(VARCHAR(50), SR.Cost)
+		FROM @SupplyRequest SR
+		inner join @Request R ON R.ID = SR.ID
+		WHERE R.RequestState = 'Approved'
+		
+		SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+		BEGIN TRANSACTION
+			INSERT INTO AP_Property(Name)
+				SELECT P.Name FROM @Property P	
+			INSERT INTO AP_CropType(Name)
+				SELECT CT.Name FROM @CropType CT	
+			INSERT INTO AP_Cycle(StartDate, EndDate)
+				SELECT C.StartDate, C.EndDate FROM @Cycle C	
+			INSERT INTO AP_Attendant(Name)
+				SELECT A.Name FROM @Attendant A	
+			INSERT INTO AP_ActivityType(Name)
+				SELECT AT.Name FROM @ActivityType AT		
+			--------------------------------------------------
+			INSERT INTO AP_Service(Name, Cost)
+				SELECT S.Name, S.Cost FROM @Service S		
+			INSERT INTO AP_Machinery(Name, Cost)
+				SELECT M.Name, M.Cost FROM @Machinery M		
+			INSERT INTO AP_Supply(Name, Cost, Quantity)
+				SELECT S.Name, S.Cost, S.Quantity FROM @Supply S		
+			--------------------------------------------------	
+			INSERT INTO AP_Lot(FK_Property, Code)
+				SELECT L.FK_Property, L.Code FROM @Lot L
+			INSERT INTO AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, ServicesBalance, SuppliesBalance, MachineryBalance)
+				SELECT LC.FK_Lot, LC.FK_CropType, LC.FK_Cycle, 0, 0, 0 FROM @LotXCycle LC
+			INSERT INTO AP_Request(FK_LotXCycle, FK_RequestType, FK_Attendant, FK_ActivityType, RequestDescription, RequestState)
+				SELECT R.FK_LotXCycle, R.FK_RequestType, R.FK_Attendant, R.FK_ActivityType, R.RequestDescription, R.RequestState FROM @Request R
+			INSERT INTO AP_ServiceRequest(ID, FK_Service, AmountHours)
+				SELECT SR.ID, SR.FK_Service, SR.AmountHours FROM @ServiceRequest SR
+			INSERT INTO AP_MachineryRequest(ID, FK_Machinery, AmountHours)
+				SELECT MR.ID, MR.FK_Machinery, MR.AmountHours FROM @MachineryRequest MR
+			INSERT INTO AP_SupplyRequest(ID, FK_Supply, Amount)
+				SELECT SR.ID, SR.FK_Supply, SR.Amount FROM @SupplyRequest SR
+			INSERT INTO AP_Historical(FK_Request, ActivityDate, ActivityDescription)
+				SELECT H.FK_Request, H.ActivityDate, H.ActivityDescription FROM @Historical H			
+			INSERT INTO AP_ServiceMovement(FK_ServiceRequest, Amount, MovementDate, MovementDescription)
+				SELECT SM.FK_ServiceRequest, SM.Amount, SM.MovementDate, SM.MovementDescription FROM @ServiceMovement SM
+			INSERT INTO AP_MachineryMovement(FK_MachineryRequest, Amount, MovementDate, MovementDescription)
+				SELECT MM.FK_MachineryRequest, MM.Amount, MM.MovementDate, MM.MovementDescription FROM @MachineryMovement MM
+			INSERT INTO AP_SupplyMovement(FK_SupplyRequest, Amount, MovementDate, MovementDescription)
+				SELECT SM.FK_SupplyRequest, SM.Amount, SM.MovementDate, SM.MovementDescription FROM @SupplyMovement SM
+
+			-- SALDOS
+
+		COMMIT
 	END TRY
 	BEGIN CATCH
 		/*IF @@TRANCOUNT = 1

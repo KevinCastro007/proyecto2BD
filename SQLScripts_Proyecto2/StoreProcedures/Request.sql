@@ -20,7 +20,7 @@ BEGIN
 						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_ServiceID(@Request))
 						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 						FROM dbo.AP_ServiceRequest SR
-					SET @ServiceHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + ': ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
+					SET @ServiceHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 					IF (@State = 'Aprobada')
 					BEGIN
 						DECLARE @ServiceMovementDescription VARCHAR(150)
@@ -71,7 +71,7 @@ BEGIN
 						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_SupplyID(@Request))
 						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '.' 
 						FROM dbo.AP_SupplyRequest SR
-					SET @SupplyHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + ': ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '.'
+					SET @SupplyHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '.'
 					IF (@State = 'Aprobada')
 					BEGIN
 						DECLARE @SupplyMovementDescription VARCHAR(150)
@@ -125,7 +125,7 @@ BEGIN
 						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_MachineryID(@Request))
 						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 						FROM dbo.AP_MachineryRequest MR
-					SET @MachineryHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + ': ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
+					SET @MachineryHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 					IF (@State = 'Aprobada')
 					BEGIN
 						DECLARE @MachineryMovementDescription VARCHAR(150)
