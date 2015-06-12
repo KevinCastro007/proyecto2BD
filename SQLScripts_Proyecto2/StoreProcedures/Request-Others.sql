@@ -51,7 +51,7 @@ BEGIN
 				SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 				BEGIN TRANSACTION
 					INSERT INTO dbo.AP_MachineryMovement(FK_MachineryRequest, Amount, MovementDate, MovementDescription)
-					VALUES (@RequestId, @RealAmount, GETDATE(), @RealDescription)		
+					VALUES (@RequestId, @RealAmount, GETDATE(), @oldDescription)		
 					UPDATE dbo.AP_Request SET RequestState = 'Aprobada' FROM dbo.AP_Request R
 						WHERE R.RequestDescription = @oldDescription	
 						SET @Cost = (SELECT M.Cost  FROM dbo.AP_Machinery M
