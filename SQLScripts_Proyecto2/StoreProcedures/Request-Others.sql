@@ -3,13 +3,13 @@ USE AgriculturalProperty
 
 GO
 -- Procedure for approving a certain request
-CREATE PROCEDURE dbo.APSP_ApproveRequest(@oldDescription VARCHAR(200), @RealAmount FLOAT, @RealDescription VARCHAR(50))
+ALTER PROCEDURE dbo.APSP_ApproveRequest(@oldDescription VARCHAR(200), @RealAmount FLOAT, @RealDescription VARCHAR(50))
 AS
 BEGIN
 	BEGIN TRY
 		IF (dbo.APFN_ApproveRequestVerify(@oldDescription, @RealAmount, @RealDescription) = 1)
 		BEGIN
-			DECLARE @RequestId INT, @RequestAmount FLOAT
+			DECLARE @RequestId INT, @RequestAmount FLOAT, @Cost FLOAT
 			SET @RequestId = (SELECT R.ID  FROM dbo.AP_Request R
 								WHERE R.RequestState ='Pendiente' and  R.RequestDescription = @oldDescription)
 			IF(dbo.APFN_ServiceRequestID(@RequestId) <> 0)
@@ -20,8 +20,11 @@ BEGIN
 					VALUES (@RequestId, @RealAmount, GETDATE(), @RealDescription)
 					UPDATE dbo.AP_Request SET RequestState = 'Aprobada' FROM dbo.AP_Request R
 						WHERE R.RequestDescription = @oldDescription
-					--Realizar calculo del costo
-					UPDATE dbo.AP_LotXCycle SET	ServicesBalance = ServicesBalance + @RealAmount FROM dbo.AP_Request R
+					SET @Cost = (SELECT S.Cost  FROM dbo.AP_Service S
+								inner join AP_ServiceRequest SR ON SR.FK_Service = S.ID
+								inner join AP_Request R ON R.ID = SR.ID 
+								WHERE R.RequestDescription = @oldDescription)
+					UPDATE dbo.AP_LotXCycle SET	ServicesBalance = ServicesBalance + (@RealAmount*@Cost) FROM dbo.AP_Request R
 					inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
 					WHERE  R.RequestDescription = @oldDescription
 				COMMIT
@@ -33,8 +36,12 @@ BEGIN
 					INSERT INTO dbo.AP_SupplyMovement(FK_SupplyRequest, Amount, MovementDate, MovementDescription)
 					VALUES (@RequestId, @RealAmount, GETDATE(), @RealDescription)		
 					UPDATE dbo.AP_Request SET RequestState = 'Aprobada' FROM dbo.AP_Request R
-						WHERE R.RequestDescription = @oldDescription		
-					UPDATE dbo.AP_LotXCycle SET	SuppliesBalance = SuppliesBalance + @RealAmount FROM dbo.AP_Request R
+						WHERE R.RequestDescription = @oldDescription	
+						SET @Cost = (SELECT S.Cost  FROM dbo.AP_Supply S
+								inner join AP_SupplyRequest SR ON SR.FK_Supply = S.ID
+								inner join AP_Request R ON R.ID = SR.ID 
+								WHERE R.RequestDescription = @oldDescription)	
+					UPDATE dbo.AP_LotXCycle SET	SuppliesBalance = SuppliesBalance + (@RealAmount*@Cost)  FROM dbo.AP_Request R
 					inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID 
 					WHERE  R.RequestDescription = @oldDescription
 				COMMIT
@@ -47,7 +54,11 @@ BEGIN
 					VALUES (@RequestId, @RealAmount, GETDATE(), @RealDescription)		
 					UPDATE dbo.AP_Request SET RequestState = 'Aprobada' FROM dbo.AP_Request R
 						WHERE R.RequestDescription = @oldDescription	
-					UPDATE dbo.AP_LotXCycle SET	MachineryBalance = MachineryBalance + @RealAmount FROM dbo.AP_Request R
+						SET @Cost = (SELECT M.Cost  FROM dbo.AP_Machinery M
+								inner join AP_MachineryRequest MR ON MR.FK_Machinery = M.ID
+								inner join AP_Request R ON R.ID = MR.ID 
+								WHERE R.RequestDescription = @oldDescription)
+					UPDATE dbo.AP_LotXCycle SET	MachineryBalance = MachineryBalance + (@RealAmount*@Cost)  FROM dbo.AP_Request R
 					inner join dbo.AP_LotXCycle LC ON R.FK_LotXCycle = LC.ID
 					WHERE  R.RequestDescription = @oldDescription
 				COMMIT
