@@ -4,7 +4,7 @@ GO
 USE AgriculturalProperty
 
 GO
-CREATE PROCEDURE APSP_InsertRequest(@FK_LotXCycle INT,  @FK_ActivityType INT, @FK_Attendant INT, @RequestType VARCHAR(50), @Request VARCHAR(50), @Amount FLOAT, @State VARCHAR(50))
+ALTER PROCEDURE APSP_InsertRequest(@FK_LotXCycle INT,  @FK_ActivityType INT, @FK_Attendant INT, @RequestType VARCHAR(50), @Request VARCHAR(50), @Amount FLOAT, @State VARCHAR(50))
 AS
 BEGIN
 	BEGIN TRY
@@ -16,10 +16,9 @@ BEGIN
 				IF (dbo.APFN_ServiceID(@Request) <> 0)
 				BEGIN	
 					DECLARE @ServiceRequestDescription VARCHAR(150), @ServiceHistoricalDescription VARCHAR(150)
-					SELECT @ServiceRequestDescription =  'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
+					SET @ServiceRequestDescription =  'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
 						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_ServiceID(@Request))
 						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
-						FROM dbo.AP_ServiceRequest SR
 					SET @ServiceHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 					IF (@State = 'Aprobada')
 					BEGIN
@@ -64,13 +63,12 @@ BEGIN
 			END
 			IF (@RequestType = 'Suministro')
 			BEGIN 
-				IF (dbo.APFN_SupplyQuantity(@Request) - @Amount >= 0)
+				IF (dbo.APFN_SupplyID(@Request) <> 0)
 				BEGIN
 					DECLARE @SupplyRequestDescription VARCHAR(150), @SupplyHistoricalDescription VARCHAR(150)
-					SELECT @SupplyRequestDescription = 'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
+					SET @SupplyRequestDescription = 'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
 						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_SupplyID(@Request))
 						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '.' 
-						FROM dbo.AP_SupplyRequest SR
 					SET @SupplyHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + '.'
 					IF (@State = 'Aprobada')
 					BEGIN
@@ -90,9 +88,6 @@ BEGIN
 								VALUES(@RequestID, dbo.APFN_SupplyID(@Request), @Amount)
 							INSERT INTO dbo.AP_SupplyMovement(FK_SupplyRequest, Amount, MovementDate, MovementDescription)
 								VALUES(@RequestID, dbo.APFN_SupplyCost(@Request) * @Amount, GETDATE(), @SupplyMovementDescription)			
-							UPDATE dbo.AP_Supply SET Quantity = Quantity - @Amount
-								FROM dbo.AP_Supply S 
-								WHERE S.ID = dbo.APFN_SupplyID(@Request)
 							UPDATE dbo.AP_LotXCycle SET SuppliesBalance = SuppliesBalance + dbo.APFN_SupplyCost(@Request) * @Amount
 								FROM dbo.AP_LotXCycle LC 
 								WHERE LC.ID = @FK_LotXCycle
@@ -121,10 +116,9 @@ BEGIN
 				IF (dbo.APFN_MachineryID(@Request) <> 0)
 				BEGIN
 					DECLARE @MachineryRequestDescription VARCHAR(150), @MachineryHistoricalDescription VARCHAR(150)
-					SELECT @MachineryRequestDescription = 'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
+					SET @MachineryRequestDescription = 'COD' + CONVERT(VARCHAR(10), @FK_LotXCycle) + CONVERT(VARCHAR(10), @FK_ActivityType)
 						+ CONVERT(VARCHAR(10), dbo.APFN_RequestTypeID(@RequestType)) + CONVERT(VARCHAR(10), dbo.APFN_MachineryID(@Request))
 						+ '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
-						FROM dbo.AP_MachineryRequest MR
 					SET @MachineryHistoricalDescription = 'Fecha de registro: ' + CONVERT(VARCHAR(10), GETDATE(), 103) + '. Solicitiud de ' + @RequestType + '. ' + @Request + ', cantidad: ' + CONVERT(VARCHAR(50), @Amount) + ' hora(s).'
 					IF (@State = 'Aprobada')
 					BEGIN

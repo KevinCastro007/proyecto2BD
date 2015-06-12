@@ -248,7 +248,7 @@ BEGIN
 				WHERE CT.Name = lot.value('@cropType', 'VARCHAR(50)')))) 
 				+ CONVERT(VARCHAR(10), (SELECT AT.ID FROM @ActivityType AT
 				WHERE AT.Name = activity.value('@description', 'VARCHAR(50)'))) 
-				+ CONVERT(VARCHAR(10), 1) 
+				+ CONVERT(VARCHAR(10), 2) 
 				+ CONVERT(VARCHAR(10), (SELECT M.ID FROM @Machinery M
 				WHERE M.Name = machinery.value('@name', 'VARCHAR(50)')))  
 				+ '. ' + machinery.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), machinery.value('@duration', 'VARCHAR(50)')) + ' hora(s).',
@@ -303,7 +303,7 @@ BEGIN
 				WHERE CT.Name = lot.value('@cropType', 'VARCHAR(50)')))) 
 				+ CONVERT(VARCHAR(10), (SELECT AT.ID FROM @ActivityType AT
 				WHERE AT.Name = activity.value('@description', 'VARCHAR(50)'))) 
-				+ CONVERT(VARCHAR(10), 1) 
+				+ CONVERT(VARCHAR(10), 3) 
 				+ CONVERT(VARCHAR(10), (SELECT S.ID FROM @Supply S
 				WHERE S.Name = supply.value('@name', 'VARCHAR(50)')))  
 				+ '. ' + supply.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), supply.value('@units', 'VARCHAR(50)')) + '.',
@@ -369,7 +369,8 @@ BEGIN
 		FROM @SupplyRequest SR
 		inner join @Request R ON R.ID = SR.ID
 		WHERE R.RequestState = 'Approved'
-		
+
+		/*
 		SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 		BEGIN TRANSACTION
 			INSERT INTO AP_Property(Name)
@@ -387,7 +388,7 @@ BEGIN
 				SELECT S.Name, S.Cost FROM @Service S		
 			INSERT INTO AP_Machinery(Name, Cost)
 				SELECT M.Name, M.Cost FROM @Machinery M		
-			INSERT INTO AP_Supply(Name, Cost, Quantity)
+			INSERT INTO AP_Supply(Name, Cost)
 				SELECT S.Name, S.Cost, S.Quantity FROM @Supply S		
 			--------------------------------------------------	
 			INSERT INTO AP_Lot(FK_Property, Code)
@@ -413,7 +414,7 @@ BEGIN
 
 			-- SALDOS
 
-		COMMIT
+		COMMIT*/
 	END TRY
 	BEGIN CATCH
 		/*IF @@TRANCOUNT = 1
