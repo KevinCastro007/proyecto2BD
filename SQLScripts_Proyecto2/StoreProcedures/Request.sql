@@ -4,7 +4,7 @@ GO
 USE AgriculturalProperty
 
 GO
-ALTER PROCEDURE APSP_InsertRequest(@FK_LotXCycle INT,  @FK_ActivityType INT, @FK_Attendant INT, @RequestType VARCHAR(50), @Request VARCHAR(50), @Amount FLOAT, @State VARCHAR(50))
+CREATE PROCEDURE APSP_InsertRequest(@FK_LotXCycle INT,  @FK_ActivityType INT, @FK_Attendant INT, @RequestType VARCHAR(50), @Request VARCHAR(50), @Amount FLOAT, @State VARCHAR(50))
 AS
 BEGIN
 	BEGIN TRY

@@ -4,15 +4,9 @@ GO
 USE AgriculturalProperty
 
 GO
-CREATE PROCEDURE APSP_ActivityType(@Type int)
+CREATE PROCEDURE APSP_ActivityTypes
 AS
 BEGIN
-	BEGIN TRY
-		SELECT AT.Name FROM dbo.AP_ActivityType AT
-		RETURN 1
-	END TRY
-	BEGIN CATCH
-		RETURN @@ERROR * -1
-	END CATCH
+	SELECT AT.Name FROM dbo.AP_ActivityType AT
 END
 
