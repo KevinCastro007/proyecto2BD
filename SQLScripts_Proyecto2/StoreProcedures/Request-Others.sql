@@ -3,7 +3,7 @@ USE AgriculturalProperty
 
 GO
 -- Procedure for approving a certain request
-ALTER PROCEDURE dbo.APSP_ApproveRequest(@oldDescription VARCHAR(200), @RealAmount FLOAT, @RealDescription VARCHAR(50))
+CREATE PROCEDURE dbo.APSP_ApproveRequest(@oldDescription VARCHAR(200), @RealAmount FLOAT, @RealDescription VARCHAR(50))
 AS
 BEGIN
 	BEGIN TRY
