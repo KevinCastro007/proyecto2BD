@@ -55,7 +55,7 @@ public class LotXCycle {
     
     public ArrayList<String> getActivityType(Integer pActivity) throws SQLException {
         ArrayList<String> grupos = new ArrayList<>();
-        rs = this.stm.executeQuery(String.format("dbo.APSP_ActivityType '%s'", pActivity));
+        rs = this.stm.executeQuery(String.format("APSP_ActivityTypes"));
         while (rs.next()) {
             grupos.add(rs.getString("Name"));
         }
