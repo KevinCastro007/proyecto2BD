@@ -107,8 +107,7 @@ myApp.controller('homeController', function ($scope, $http, sharedProperties) {
 		});			
 	};	
 	$scope.cycleSelection = function () {
-		var IDs = [$scope.access.lot.ID, $scope.access.cycle.ID];
-		$http.get('/lotXCycleID/' + IDs).success(function (response) {
+		$http.post('/lotXCycleID', $scope.access).success(function (response) {
 			sharedProperties.setLotXCycle(response);
 			$http.get('/lotXCycle/' + sharedProperties.getLotXCycle()).success(function (response) {
 				$scope.cropType = response.cropType;
@@ -147,27 +146,31 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 		});			
 	};	
 	$scope.cycleSelection = function () {
-		var IDs = [$scope.access.lot.ID, $scope.access.cycle.ID];
-		$http.get('/lotXCycleID/' + IDs).success(function (response) {
+		$http.post('/lotXCycleID', $scope.access).success(function (response) {
 			sharedProperties.setLotXCycle(response);
 			$http.get('/historicalDates/' + sharedProperties.getLotXCycle()).success(function (response) {
-				console.log(response);
 				$scope.periods = response;	
 			});	
-			$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {
-				if (typeof(response) != 'undefined') {
+			$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {				
+				if (response.length > 0) {
 					$scope.histories = response;	
 					$scope.flag = true;
-				} 
+				}  
+				else {
+					$scope.flag = false;
+				}
 			});			
 		});					
 	};	
 	$scope.showResult = function () {
 		$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {
-			if (typeof(response) != 'undefined') {
+			if (response.length > 0) {
 				$scope.histories = response;	
 				$scope.flag = true;
-			} 
+			}  
+			else {
+				$scope.flag = false;
+			}
 		});
 	};	
 	refresh();
@@ -196,8 +199,7 @@ myApp.controller('requestController', function ($scope, $http, sharedProperties)
 		});			
 	};	
 	$scope.cycleSelection = function () {
-		var IDs = [$scope.access.lot.ID, $scope.access.cycle.ID];
-		$http.get('/lotXCycleID/' + IDs).success(function (response) {
+		$http.post('/lotXCycleID', $scope.access).success(function (response) {
 			sharedProperties.setLotXCycle(response);	
 		});			
 	};		

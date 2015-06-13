@@ -40,7 +40,7 @@ module.exports = function (app, mssql, configuration) {
 		    //Ejecución del Store Procedure (SP).
 		    request.execute('dbo.APSP_Historical', function (err, recordsets, returnValue) {
 		        //Inicialización del Array Respuesta.
-		        if (typeof(recordsets[0]) != 'undefined') {
+		        if (recordsets[0] != []) {
 		        	console.log("Successful execution (SP: HISTORICAL)");
 			        historical = new Array(recordsets[0].length);
 			        for (var i = 0; i < recordsets[0].length; i++) {
@@ -50,8 +50,6 @@ module.exports = function (app, mssql, configuration) {
 			        	history.activity = recordsets[0][i].ActivityName;
 			        	history.attendant = recordsets[0][i].Attendant;
 			        	history.requestType = recordsets[0][i].RequestType;
-			        	//history.requestItem = ;
-			        	//history.amount = ;
 			        	history.description = recordsets[0][i].RequestDescription;
 			        	history.state = recordsets[0][i].RequestState;
 			        	//Adjuntar el JSON al Array Respuesta.

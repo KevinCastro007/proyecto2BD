@@ -3,9 +3,9 @@
 //Parámetros desde el Servidor: app, mssql y configuration.
 module.exports = function (app, mssql, configuration) {
 	//Lote X Ciclo (server get)
-	app.get('/lotXCycleID/:IDs', function (request, response) {	
-		var fk_Lot = request.params.IDs[0];
-		var fk_Cycle = request.params.IDs[2];
+	app.post('/lotXCycleID', function (request, response) {	
+		var fk_Lot = request.body.lot.ID;
+		var fk_Cycle = request.body.cycle.ID;
 		//Conexión a la BD según: configuration.
 		var connection = new mssql.Connection(configuration, function (err) {
 			//Request de la Conexión.
