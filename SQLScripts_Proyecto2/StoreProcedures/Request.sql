@@ -1,6 +1,5 @@
 /* Stored Procedures related with: Request */
 
-GO
 USE AgriculturalProperty
 
 GO

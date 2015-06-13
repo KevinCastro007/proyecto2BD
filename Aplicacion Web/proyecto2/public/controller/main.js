@@ -242,6 +242,7 @@ myApp.controller('requestController', function ($scope, $http, sharedProperties)
 			alert("Seleccione el Estado!");
 		}		
 		else {	
+			console.log($scope.request);
 			$http.put('/request/' + sharedProperties.getLotXCycle(), $scope.request).success(function (response) {
 				if (response.resultado) {
 					refresh();

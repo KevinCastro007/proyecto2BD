@@ -7,6 +7,6 @@ GO
 CREATE PROCEDURE APSP_ActivityTypes
 AS
 BEGIN
-	SELECT AT.Name FROM dbo.AP_ActivityType AT
+	SELECT AT.ID, AT.Name FROM dbo.AP_ActivityType AT
 END
 

@@ -232,7 +232,8 @@ BEGIN
 			(SELECT S.ID FROM @Service S
 				WHERE S.Name = service.value('@name', 'VARCHAR(50)')),
 			service.value('@duration', 'VARCHAR(50)'),
-			(CONVERT(FLOAT, service.value('@duration', 'VARCHAR(50)')) * CONVERT(FLOAT, service.value('@costPerHour', 'VARCHAR(50)')))
+			(CONVERT(FLOAT, service.value('@duration', 'VARCHAR(50)')) 
+				* CONVERT(FLOAT, service.value('@costPerHour', 'VARCHAR(50)')))
 		FROM @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
@@ -299,7 +300,8 @@ BEGIN
 			(SELECT M.ID FROM @Machinery M
 				WHERE M.Name = machinery.value('@name', 'VARCHAR(50)')),
 			machinery.value('@duration', 'VARCHAR(50)'),
-			(CONVERT(FLOAT, machinery.value('@duration', 'VARCHAR(50)')) * CONVERT(FLOAT, machinery.value('@costPerHour', 'VARCHAR(50)')))
+			(CONVERT(FLOAT, machinery.value('@duration', 'VARCHAR(50)')) 
+				* CONVERT(FLOAT, machinery.value('@costPerHour', 'VARCHAR(50)')))
 		FROM    @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
