@@ -21,17 +21,17 @@ BEGIN
 		DECLARE @Doc XML, @MaxRequest INT
 		SELECT @Doc = BulkColumn 
 			FROM OPENROWSET(BULK 'D:\XMLfarm.xml', SINGLE_CLOB) AS xmlDATA
-		DECLARE @Property TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50))
+		DECLARE @Property TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50))
 		DECLARE @CropType TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50))
-		DECLARE @Cycle TABLE(ID INT IDENTITY(1,1), StartDate DATE, EndDate DATE)
+		DECLARE @Cycle TABLE(ID INT IDENTITY(1, 1), StartDate DATE, EndDate DATE)
 		DECLARE @ActivityType TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50))
-		DECLARE @Service TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50), Cost FLOAT)
-		DECLARE @Supply TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50), Cost FLOAT)
-		DECLARE @Machinery TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50), Cost FLOAT)
-		DECLARE @AttendantTemp TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50))
-		DECLARE @Attendant TABLE(ID INT IDENTITY(1,1), Name VARCHAR(50))
-		DECLARE @Lot TABLE(ID INT IDENTITY(1,1), FK_Property INT, Code VARCHAR(50))	
-		DECLARE @LotXCycle TABLE(ID INT IDENTITY(1,1), FK_Lot INT, FK_Cycle INT, FK_CropType INT, ServicesBalance FLOAT, SuppliesBalance FLOAT, MachineryBalance FLOAT)
+		DECLARE @Service TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50), Cost FLOAT)
+		DECLARE @Supply TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50), Cost FLOAT)
+		DECLARE @Machinery TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50), Cost FLOAT)
+		DECLARE @AttendantTemp TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50))
+		DECLARE @Attendant TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50))
+		DECLARE @Lot TABLE(ID INT IDENTITY(1, 1), FK_Property INT, Code VARCHAR(50))	
+		DECLARE @LotXCycle TABLE(ID INT IDENTITY(1, 1), FK_Lot INT, FK_Cycle INT, FK_CropType INT, ServicesBalance FLOAT, SuppliesBalance FLOAT, MachineryBalance FLOAT)
 		DECLARE @Request TABLE(ID INT IDENTITY(1, 1), FK_LotXCycle INT, FK_RequestType INT, FK_Attendant INT, FK_ActivityType INT, 
 			RequestDescription VARCHAR(150), RequestState VARCHAR(50), RequestDate DATE, TransactionDate DATE)
 		DECLARE @ServiceRequest TABLE(ID INT, FK_Service INT, AmountHours FLOAT, Cost FLOAT)
@@ -217,11 +217,11 @@ BEGIN
 				+ '. ' + service.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), service.value('@duration', 'VARCHAR(50)')) + ' hora(s).',				
 			service.value('@status', 'VARCHAR(50)'),
 			(SUBSTRING(service.value('@requestDate', 'VARCHAR(10)'), 4, 2) + '/' + 
-			SUBSTRING(service.value('@requestDate', 'VARCHAR(10)'), 0, 3) + '/' + 
-			SUBSTRING(service.value('@requestDate', 'VARCHAR(10)'), 7, LEN(service.value('@requestDate', 'VARCHAR(10)')))),			
+				SUBSTRING(service.value('@requestDate', 'VARCHAR(10)'), 0, 3) + '/' + 
+				SUBSTRING(service.value('@requestDate', 'VARCHAR(10)'), 7, LEN(service.value('@requestDate', 'VARCHAR(10)')))),			
 			(SUBSTRING(service.value('@transactionDate', 'VARCHAR(10)'), 4, 2) + '/' + 
-			SUBSTRING(service.value('@transactionDate', 'VARCHAR(10)'), 0, 3) + '/' + 
-			SUBSTRING(service.value('@transactionDate', 'VARCHAR(10)'), 7, LEN(service.value('@transactionDate', 'VARCHAR(10)'))))
+				SUBSTRING(service.value('@transactionDate', 'VARCHAR(10)'), 0, 3) + '/' + 
+				SUBSTRING(service.value('@transactionDate', 'VARCHAR(10)'), 7, LEN(service.value('@transactionDate', 'VARCHAR(10)'))))
 		FROM @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
@@ -284,11 +284,11 @@ BEGIN
 				+ '. ' + machinery.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), machinery.value('@duration', 'VARCHAR(50)')) + ' hora(s).',
 			machinery.value('@status', 'VARCHAR(50)'),
 			(SUBSTRING(machinery.value('@requestDate', 'VARCHAR(10)'), 4, 2) + '/' + 
-			SUBSTRING(machinery.value('@requestDate', 'VARCHAR(10)'), 0, 3) + '/' + 
-			SUBSTRING(machinery.value('@requestDate', 'VARCHAR(10)'), 7, LEN(machinery.value('@requestDate', 'VARCHAR(10)')))),			
+				SUBSTRING(machinery.value('@requestDate', 'VARCHAR(10)'), 0, 3) + '/' + 
+				SUBSTRING(machinery.value('@requestDate', 'VARCHAR(10)'), 7, LEN(machinery.value('@requestDate', 'VARCHAR(10)')))),			
 			(SUBSTRING(machinery.value('@transactionDate', 'VARCHAR(10)'), 4, 2) + '/' + 
-			SUBSTRING(machinery.value('@transactionDate', 'VARCHAR(10)'), 0, 3) + '/' + 
-			SUBSTRING(machinery.value('@transactionDate', 'VARCHAR(10)'), 7, LEN(machinery.value('@transactionDate', 'VARCHAR(10)'))))
+				SUBSTRING(machinery.value('@transactionDate', 'VARCHAR(10)'), 0, 3) + '/' + 
+				SUBSTRING(machinery.value('@transactionDate', 'VARCHAR(10)'), 7, LEN(machinery.value('@transactionDate', 'VARCHAR(10)'))))
 		FROM @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
@@ -351,11 +351,11 @@ BEGIN
 				+ '. ' + supply.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), supply.value('@units', 'VARCHAR(50)')) + '.',
 			supply.value('@status', 'VARCHAR(50)'),
 			(SUBSTRING(supply.value('@requestDate', 'VARCHAR(10)'), 4, 2) + '/' + 
-			SUBSTRING(supply.value('@requestDate', 'VARCHAR(10)'), 0, 3) + '/' + 
-			SUBSTRING(supply.value('@requestDate', 'VARCHAR(10)'), 7, LEN(supply.value('@requestDate', 'VARCHAR(10)')))),			
+				SUBSTRING(supply.value('@requestDate', 'VARCHAR(10)'), 0, 3) + '/' + 
+				SUBSTRING(supply.value('@requestDate', 'VARCHAR(10)'), 7, LEN(supply.value('@requestDate', 'VARCHAR(10)')))),			
 			(SUBSTRING(supply.value('@transactionDate', 'VARCHAR(10)'), 4, 2) + '/' + 
-			SUBSTRING(supply.value('@transactionDate', 'VARCHAR(10)'), 0, 3) + '/' + 
-			SUBSTRING(supply.value('@transactionDate', 'VARCHAR(10)'), 7, LEN(supply.value('@transactionDate', 'VARCHAR(10)'))))
+				SUBSTRING(supply.value('@transactionDate', 'VARCHAR(10)'), 0, 3) + '/' + 
+				SUBSTRING(supply.value('@transactionDate', 'VARCHAR(10)'), 7, LEN(supply.value('@transactionDate', 'VARCHAR(10)'))))
 		FROM @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
@@ -425,9 +425,9 @@ BEGIN
 		FROM @SupplyRequest SR
 		inner join @Request R ON R.ID = SR.ID
 		WHERE R.RequestState = 'Approved'
-		UPDATE @LotXCycle SET MachineryBalance = MachineryBalance + MM.Amount
-			FROM @MachineryMovement MM
-			inner join @MachineryRequest SR ON SR.ID = MM.FK_MachineryRequest
+		UPDATE @LotXCycle SET SuppliesBalance = SuppliesBalance + SM.Amount
+			FROM @SupplyMovement SM
+			inner join @SupplyRequest SR ON SR.ID = SM.FK_SupplyRequest
 			inner join @Request R ON R.ID = SR.ID
 			inner join @LotXCycle LC ON LC.ID = R.FK_LotXCycle
 
