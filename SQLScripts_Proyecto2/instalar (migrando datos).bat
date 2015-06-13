@@ -1,5 +1,5 @@
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\AgriculturalProperty.sql
-sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\FillingScript Basics.sql
+sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\FillingScriptBasics.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\ActivityType.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\Attendant.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\CropType.sql
@@ -17,7 +17,6 @@ sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\Supply.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\ServiceRequest.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\SupplyRequest.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\MachineryRequest.sql
-sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Activity.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\ActivityType.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Attendant.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\CropType.sql

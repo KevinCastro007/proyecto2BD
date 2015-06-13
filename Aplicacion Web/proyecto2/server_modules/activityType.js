@@ -24,7 +24,7 @@ module.exports = function (app, mssql, configuration) {
 			//Request de la Conexión.
 		    var request = new mssql.Request(connection);
 		    //Ejecución del Store Procedure (SP).
-		    request.execute('dbo.APSP_Activities', function (err, recordsets, returnValue) {      	
+		    request.execute('dbo.APSP_ActivityTypes', function (err, recordsets, returnValue) {      	
 		        //Inicialización del Array Respuesta.  		
 		        activities = new Array(recordsets[0].length + 1);
 		        activity = new activityStructure();
