@@ -62,3 +62,14 @@ INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Sierra', 750)
 INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Recolector', 2000)
 INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Bomba de agua', 1750)
 INSERT INTO dbo.AP_Machinery(Name, Cost) VALUES('Cargador', 1500)
+
+INSERT INTO dbo.AP_Property(Name) VALUES('Pindeco S.A')
+
+INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(76, 'PI00')
+INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(76, 'PIA2')
+
+INSERT INTO dbo.AP_Cycle(StartDate, EndDate) VALUES('2015-06-11', '2015-11-18')
+INSERT INTO dbo.AP_Cycle(StartDate, EndDate) VALUES('2015-06-02', '2015-10-12')
+
+INSERT INTO dbo.AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, ServicesBalance, SuppliesBalance, MachineryBalance) VALUES(436, 5, 21, 0, 0, 0)
+INSERT INTO dbo.AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, ServicesBalance, SuppliesBalance, MachineryBalance) VALUES(437, 10, 22, 0, 0, 0)

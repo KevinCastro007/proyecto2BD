@@ -443,14 +443,12 @@ BEGIN
 				SELECT AT.Name FROM @ActivityType AT	
 			INSERT INTO AP_Attendant(Name)
 				SELECT A.Name FROM @Attendant A				
-			--------------------------------------------------------------------------------------------------------------------
 			INSERT INTO AP_Service(Name, Cost)
 				SELECT S.Name, S.Cost FROM @Service S		
 			INSERT INTO AP_Machinery(Name, Cost)
 				SELECT M.Name, M.Cost FROM @Machinery M		
 			INSERT INTO AP_Supply(Name, Cost)
 				SELECT S.Name, S.Cost FROM @Supply S		
-			--------------------------------------------------------------------------------------------------------------------
 			INSERT INTO AP_Lot(FK_Property, Code)
 				SELECT L.FK_Property, L.Code FROM @Lot L
 			INSERT INTO AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, ServicesBalance, SuppliesBalance, MachineryBalance)
@@ -480,3 +478,6 @@ BEGIN
 		RETURN @@ERROR * - 1
 	END CATCH
 END
+
+/*GO
+EXEC APSP_MigrateData*/

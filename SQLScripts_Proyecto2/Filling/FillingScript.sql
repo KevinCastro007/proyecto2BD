@@ -21,8 +21,6 @@ INSERT INTO dbo.AP_Property(Name) VALUES('Tierra del Viejo')
 /* - Insertion in the table Lot: AP_Lot - */
 INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(1, 'HTP1')
 INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(1, 'HTP2')
---INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(77, 'PI00')
---INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(77, 'PIA2')
 INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(2, 'PI00')
 INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(2, 'PI01')
 INSERT INTO dbo.AP_Lot(FK_Property, Code) VALUES(3, 'TV00')
@@ -43,8 +41,6 @@ INSERT INTO dbo.AP_Cycle(StartDate, EndDate) VALUES('2016-01-12', '2016-05-29')
 SELECT * FROM AP_Lot
 SELECT * FROM AP_Cycle
 SELECT * FROM AP_CropType
-INSERT INTO dbo.AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, ServicesBalance, SuppliesBalance, MachineryBalance) VALUES(435, 5, 21, 0, 0, 0)
-INSERT INTO dbo.AP_LotXCycle(FK_Lot, FK_CropType, FK_Cycle, ServicesBalance, SuppliesBalance, MachineryBalance) VALUES(436, 10, 22, 0, 0, 0)
 */
 
 /* - Insertion in the table Lot X Cycle: AP_LotXCycle - */

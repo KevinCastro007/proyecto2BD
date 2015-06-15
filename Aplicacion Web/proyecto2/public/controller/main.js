@@ -116,6 +116,11 @@ myApp.controller('homeController', function ($scope, $http, sharedProperties) {
 				$scope.machineryBalance = response.machineryBalance;		
 				$scope.totalBalance = response.suppliesBalance + response.servicesBalance + response.machineryBalance;
 			});	
+			$http.get('/lastRequestRecord/' + sharedProperties.getLotXCycle()).success(function (response) {
+				$scope.partialBalance = response[0];
+				$scope.lastRequest = response[1][0];		
+			});	
+
 			$scope.lot = $scope.access.lot.code;
 			$scope.access = "";
 			$scope.showLotInfo = true;		
@@ -132,8 +137,11 @@ myApp.controller('homeController', function ($scope, $http, sharedProperties) {
 myApp.controller('historyController', function ($scope, $http, sharedProperties) {
 	var refresh = function () {
 		$http.get('/activities').success(function (response) {
-			$scope.activities = response;	
-		});			
+			$scope.activities = response;
+		});		
+		$http.get('/attendants').success(function (response) {
+			$scope.attendants = response;	
+		});				
 		$scope.historical = "";		
 	};		
 	$scope.init = function () {
@@ -147,6 +155,7 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 		});			
 	};	
 	$scope.cycleSelection = function () {
+		console.log("Mañana mamo!");
 		$http.post('/lotXCycleID', $scope.access).success(function (response) {
 			sharedProperties.setLotXCycle(response);
 			$http.get('/historicalDates/' + sharedProperties.getLotXCycle()).success(function (response) {
@@ -165,6 +174,7 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 		});					
 	};	
 	$scope.showResult = function () {
+		console.log("Mañana mamo!");
 		$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {
 			if (response[1].length > 0) {
 				$scope.partialBalance = response[0]

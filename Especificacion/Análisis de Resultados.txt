@@ -18,13 +18,13 @@ procedimiento por cada lote: Parcialmente completo.
 	- Filtros por tipo de cosecha, rango de fechas, lote o tipos de solicitudes. (Completado)
 
 Pendiente:
-	+ Estado de  la última gestión realizada.
+	+ Estado de  la última gestión realizada: COMPLETO.
 
-	+ Filtro de costos por actividad(es), cálculo de subtotales.
+	+ Filtro de costos por actividad(es), cálculo de subtotales: COMPLETO.
 
-	+ Generalizar consulta para la información de la finca, en rango de fechas.
+	+ Generalizar consulta para la información de la finca, en rango de fechas: INCOMPLETO.
 
-	+ Migración:
+	+ Migración: COMPLETO (OPMITIZAR).
 		+ Transacción
 			- Fincas
 			- Crop Type
@@ -47,7 +47,7 @@ Pendiente:
 				Supply
 			- Actualización de saldos
 
-	+ App Escritorio:
+	+ App Escritorio: COMPLETO (OPTIMIZAR)
 		+ Modificar requests
 			- Tipo de Actividad
 			- Cantidad
@@ -58,11 +58,11 @@ Pendiente:
 			- Cargar Movimiento (Inserción)
 				- Actualización de saldos
 
-	+ Blog:
+	+ Blog: INCOMPLETO.
 		+ Migración
-			- Parseo de información
+			- Parseo de información: COMPLETO.
 			- Transacción de BD
-			- Conflictos (Modificaciones)
+			- Conflictos (Modificaciones): COMPLETO.
 
 		+ Filtros
 			- Manejo de nulos

@@ -25,7 +25,31 @@
                             <h4>Maquinaria: {{machineryBalance}}</h4>
                         </li>
                     </ul>  
-                    <br><button class="btn btn-info" ng-click="changeLot()">Cambiar</button>                  
+                    <br><br>
+                    <h4>Última actividad registrada - Solicitud - Costo parcial: {{partialBalance}}</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="success">
+                                <th style="width: 80px">Fecha</th>
+                                <th style="width: 80px">Solicitud</th>
+                                <th style="width: 80px">Estado</th>
+                                <th style="width: 110px">Encargado</th>
+                                <th style="width: 110px">Actividad</th>
+                                <th style="width: 280px">Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{lastRequest.date}}</td>  
+                                <td>{{lastRequest.requestType}}</td> 
+                                <td>{{lastRequest.state}}</td>       
+                                <td>{{lastRequest.attendant}}</td>   
+                                <td>{{lastRequest.activity}}</td>       
+                                <td>{{lastRequest.description}}</td>     
+                            </tr>       
+                        </tbody>
+                    </table>                    
+                    <br><button class="btn btn-info" ng-click="changeLot()">Realizar otra Consulta</button>                  
                 </div>
             </div>
         </div>

@@ -1,5 +1,7 @@
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\AgriculturalProperty.sql
-sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\FillingScript.sql
+sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Filling\FillingBasics.sql
+sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Triggers\Triggers.sql
+sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Migration\Migration.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\ActivityType.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\Attendant.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\Functions\CropType.sql
