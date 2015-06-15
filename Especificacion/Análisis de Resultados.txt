@@ -61,13 +61,13 @@ Pendiente:
 	+ Blog: INCOMPLETO.
 		+ Migración
 			- Parseo de información: COMPLETO.
-			- Transacción de BD
+			- Transacción de BD: COMPLETO.
 			- Conflictos (Modificaciones): COMPLETO.
 
 		+ Filtros
-			- Manejo de nulos
+			- Manejo de nulos: COMPLETO.
 
-		+ Afinación de detalles (Estructuración de código)
+		+ Afinación de detalles (Estructuración de código): COMPLETO.
 
 		+ Análisis final de resultados (Recuento de horas)
 
