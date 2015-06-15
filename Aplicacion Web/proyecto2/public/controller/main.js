@@ -114,6 +114,7 @@ myApp.controller('homeController', function ($scope, $http, sharedProperties) {
 				$scope.suppliesBalance = response.suppliesBalance;
 				$scope.servicesBalance = response.servicesBalance;
 				$scope.machineryBalance = response.machineryBalance;		
+				$scope.totalBalance = response.suppliesBalance + response.servicesBalance + response.machineryBalance;
 			});	
 			$scope.lot = $scope.access.lot.code;
 			$scope.access = "";
@@ -152,8 +153,9 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 				$scope.periods = response;	
 			});	
 			$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {				
-				if (response.length > 0) {
-					$scope.histories = response;	
+				if (response[1].length > 0) {
+					$scope.partialBalance = response[0]
+					$scope.histories = response[1];	
 					$scope.flag = true;
 				}  
 				else {
@@ -164,8 +166,9 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 	};	
 	$scope.showResult = function () {
 		$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {
-			if (response.length > 0) {
-				$scope.histories = response;	
+			if (response[1].length > 0) {
+				$scope.partialBalance = response[0]
+				$scope.histories = response[1];	
 				$scope.flag = true;
 			}  
 			else {

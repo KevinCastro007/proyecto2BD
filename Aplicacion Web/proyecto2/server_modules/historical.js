@@ -55,8 +55,9 @@ module.exports = function (app, mssql, configuration) {
 			        	//Adjuntar el JSON al Array Respuesta.
 			        	historical[i] = history;
 			        };	
+			        var result = [returnValue, historical]
 					//Respuesta (Array : JSON)
-					response.json(historical);		        	
+					response.json(result);		        	
 		        }
 		        else {
 		        	response.json(undefined);		

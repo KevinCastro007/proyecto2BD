@@ -81,7 +81,7 @@ BEGIN
 		INSERT INTO @Service(Name, Cost)
 		SELECT DISTINCT 
 			service.value('@name', 'VARCHAR(50)'),
-			0
+			3500
 		FROM @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
@@ -92,7 +92,7 @@ BEGIN
 		INSERT INTO @Supply(Name, Cost)
 		SELECT DISTINCT 
 			supply.value('@name', 'VARCHAR(50)'),
-			0
+			1575
 		FROM @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
@@ -103,7 +103,7 @@ BEGIN
 		INSERT INTO @Machinery(Name, Cost)
 		SELECT DISTINCT 
 			machinery.value('@name', 'VARCHAR(50)'),
-			0
+			7575
 		FROM @Doc.nodes('/company') AS x1(company)
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
