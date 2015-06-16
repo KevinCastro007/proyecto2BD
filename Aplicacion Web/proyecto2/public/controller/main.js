@@ -108,6 +108,7 @@ myApp.controller('homeController', function ($scope, $http, sharedProperties) {
 	};	
 	$scope.cycleSelection = function () {
 		$http.post('/lotXCycleID', $scope.access).success(function (response) {
+			alert(response);
 			sharedProperties.setLotXCycle(response);
 			$http.get('/lotXCycle/' + sharedProperties.getLotXCycle()).success(function (response) {
 				$scope.cropType = response.cropType;

@@ -393,11 +393,6 @@ BEGIN
 		FROM @ServiceRequest SR
 		inner join @Request R ON R.ID = SR.ID
 		WHERE R.RequestState = 'Aprobada'
-		UPDATE @LotXCycle SET ServicesBalance = ServicesBalance + SM.Amount
-			FROM @ServiceMovement SM
-			inner join @ServiceRequest SR ON SR.ID = SM.FK_ServiceRequest
-			inner join @Request R ON R.ID = SR.ID
-			inner join @LotXCycle LC ON LC.ID = R.FK_LotXCycle
 
 		INSERT INTO @MachineryMovement(FK_MachineryRequest, Amount, MovementDate, MovementDescription)
 		SELECT 
@@ -409,11 +404,6 @@ BEGIN
 		FROM @MachineryRequest MR
 		inner join @Request R ON R.ID = MR.ID
 		WHERE R.RequestState = 'Aprobada'
-		UPDATE @LotXCycle SET MachineryBalance = MachineryBalance + MM.Amount
-			FROM @MachineryMovement MM
-			inner join @MachineryRequest MR ON MR.ID = MM.FK_MachineryRequest
-			inner join @Request R ON R.ID = MR.ID
-			inner join @LotXCycle LC ON LC.ID = R.FK_LotXCycle
 
 		INSERT INTO @SupplyMovement(FK_SupplyRequest, Amount, MovementDate, MovementDescription)
 		SELECT 
@@ -425,11 +415,6 @@ BEGIN
 		FROM @SupplyRequest SR
 		inner join @Request R ON R.ID = SR.ID
 		WHERE R.RequestState = 'Aprobada'
-		UPDATE @LotXCycle SET SuppliesBalance = SuppliesBalance + SM.Amount
-			FROM @SupplyMovement SM
-			inner join @SupplyRequest SR ON SR.ID = SM.FK_SupplyRequest
-			inner join @Request R ON R.ID = SR.ID
-			inner join @LotXCycle LC ON LC.ID = R.FK_LotXCycle
 
 		SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 		BEGIN TRANSACTION
@@ -469,6 +454,24 @@ BEGIN
 				SELECT MM.FK_MachineryRequest, MM.Amount, MM.MovementDate, MM.MovementDescription FROM @MachineryMovement MM
 			INSERT INTO AP_SupplyMovement(FK_SupplyRequest, Amount, MovementDate, MovementDescription)
 				SELECT SM.FK_SupplyRequest, SM.Amount, SM.MovementDate, SM.MovementDescription FROM @SupplyMovement SM
+			UPDATE AP_LotXCycle SET MachineryBalance = LC.MachineryBalance + (SELECT SUM(MM.Amount)
+				FROM AP_MachineryMovement MM
+				inner join AP_MachineryRequest MR ON MR.ID = MM.FK_MachineryRequest
+				inner join AP_Request R ON R.ID = MR.ID
+				WHERE R.FK_LotXCycle = LC.ID)
+				FROM AP_LotXCycle LC
+			UPDATE AP_LotXCycle SET ServicesBalance = LC.ServicesBalance + (SELECT ISNULL(SUM(SM.Amount), 0)
+				FROM AP_ServiceMovement SM
+				inner join AP_ServiceRequest MR ON MR.ID = SM.FK_ServiceRequest
+				inner join AP_Request R ON R.ID = MR.ID
+				WHERE R.FK_LotXCycle = LC.ID)
+				FROM AP_LotXCycle LC
+			UPDATE AP_LotXCycle SET SuppliesBalance = LC.SuppliesBalance + (SELECT ISNULL(SUM(SM.Amount), 0)
+				FROM AP_SupplyMovement SM
+				inner join AP_SupplyRequest MR ON MR.ID = SM.FK_SupplyRequest
+				inner join AP_Request R ON R.ID = MR.ID
+				WHERE R.FK_LotXCycle = LC.ID)
+				FROM AP_LotXCycle LC
 		COMMIT
 	END TRY
 	BEGIN CATCH
@@ -478,6 +481,3 @@ BEGIN
 		RETURN @@ERROR * - 1
 	END CATCH
 END
-
-/*GO
-EXEC APSP_MigrateData*/

@@ -42,8 +42,7 @@ module.exports = function (app, mssql, configuration) {
 		    //Ejecución del Store Procedure (SP).
 		    request.execute('dbo.APSP_Historical', function (err, recordsets, returnValue) {
 		        //Inicialización del Array Respuesta.
-		        console.log(recordsets);
-		        if (recordsets[0] != []) {
+		        if (recordsets.length > 1) {
 		        	console.log("Successful execution (SP: HISTORICAL)");
 			        historical = new Array(recordsets[0].length);
 			        for (var i = 0; i < recordsets[0].length; i++) {
