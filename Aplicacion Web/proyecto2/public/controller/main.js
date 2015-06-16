@@ -108,7 +108,6 @@ myApp.controller('homeController', function ($scope, $http, sharedProperties) {
 	};	
 	$scope.cycleSelection = function () {
 		$http.post('/lotXCycleID', $scope.access).success(function (response) {
-			alert(response);
 			sharedProperties.setLotXCycle(response);
 			$http.get('/lotXCycle/' + sharedProperties.getLotXCycle()).success(function (response) {
 				$scope.cropType = response.cropType;
@@ -156,7 +155,6 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 		});			
 	};	
 	$scope.cycleSelection = function () {
-		console.log("Mañana mamo!");
 		$http.post('/lotXCycleID', $scope.access).success(function (response) {
 			sharedProperties.setLotXCycle(response);
 			$http.get('/historicalDates/' + sharedProperties.getLotXCycle()).success(function (response) {
@@ -175,7 +173,6 @@ myApp.controller('historyController', function ($scope, $http, sharedProperties)
 		});					
 	};	
 	$scope.showResult = function () {
-		console.log("Mañana mamo!");
 		$http.post('/historical/' + sharedProperties.getLotXCycle(), $scope.historical).success(function (response) {
 			if (response[1].length > 0) {
 				$scope.partialBalance = response[0]
