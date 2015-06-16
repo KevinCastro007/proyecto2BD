@@ -11,12 +11,12 @@ BEGIN
 	BEGIN TRY
 		DECLARE @Dates TABLE(ActivityDate VARCHAR(10))
 		INSERT INTO @Dates
-		SELECT CONVERT(VARCHAR(10), H.ActivityDate, 103) AS Date FROM dbo.AP_Historical H
+		SELECT H.ActivityDate FROM dbo.AP_Historical H
 			inner join dbo.AP_Request R ON R.ID = H.FK_Request
 			WHERE R.FK_LotXCycle = @FK_LotXCycle
 			ORDER BY H.ActivityDate ASC
 		
-		SELECT DISTINCT D.ActivityDate AS Date FROM @Dates D
+		SELECT DISTINCT CONVERT(VARCHAR(10), D.ActivityDate, 103) AS Date FROM @Dates D
 	END TRY
 	BEGIN CATCH 
 		RETURN @@ERROR * -1
@@ -33,8 +33,8 @@ BEGIN
 			RequestDescription VARCHAR(150), RequestState VARCHAR(50))
 		DECLARE @PartialCost FLOAT
 		INSERT INTO @QueryResult(ID, ActivityDate, ActivityName, Attendant, RequestType, RequestDescription, RequestState)
-		SELECT R.ID, CONVERT(VARCHAR(10), H.ActivityDate, 103) AS ActivityDate, AT.Name AS ActivityName, A.Name AS Attendant, RT.Name AS RequestType, 
-				SUBSTRING(R.RequestDescription, CHARINDEX(' ', R.RequestDescription) + 1, LEN(R.RequestDescription)) AS RequestDescription, R.RequestState FROM dbo.AP_Historical H
+		SELECT R.ID, H.ActivityDate, AT.Name, A.Name, RT.Name, 
+				SUBSTRING(R.RequestDescription, CHARINDEX(' ', R.RequestDescription) + 1, LEN(R.RequestDescription)), R.RequestState FROM dbo.AP_Historical H
 			inner join dbo.AP_Request R ON R.ID = H.FK_Request
 			inner join dbo.AP_Attendant A ON A.ID = R.FK_Attendant
 			inner join dbo.AP_ActivityType AT ON AT.ID = R.FK_ActivityType
@@ -44,6 +44,7 @@ BEGIN
 				and A.Name = ISNULL(@Attendant, A.Name)
 				and	(H.ActivityDate >= ISNULL(@Start, H.ActivityDate) and H.ActivityDate <= ISNULL(@End, H.ActivityDate)) 
 				and RT.Name = ISNULL(@RequestType, RT.Name)
+			ORDER BY H.ActivityDate ASC
 
 		SELECT @PartialCost = ISNULL(@PartialCost, 0) + ISNULL(SUM(ISNULL(SerM.Amount, 0)), 0) FROM dbo.AP_ServiceMovement SerM
 			inner join dbo.AP_ServiceRequest SerR ON SerR.ID = SerM.FK_ServiceRequest
@@ -54,7 +55,8 @@ BEGIN
 		SELECT @PartialCost = ISNULL(@PartialCost, 0) + ISNULL(SUM(ISNULL(SupM.Amount, 0)), 0) FROM dbo.AP_SupplyMovement SupM
 			inner join dbo.AP_SupplyRequest SupR ON SupR.ID = SupM.FK_SupplyRequest
 			inner join @QueryResult R ON R.ID = SupR.ID
-		SELECT R.ID, R.ActivityDate, R.ActivityName, R.Attendant, R.RequestType, R.RequestDescription, R.RequestState FROM @QueryResult R
+		SELECT R.ID, CONVERT(VARCHAR(10), R.ActivityDate, 103) AS ActivityDate, R.ActivityName, R.Attendant, R.RequestType, R.RequestDescription, R.RequestState FROM @QueryResult R
+			ORDER BY R.ActivityDate ASC
 		RETURN @PartialCost
 	END TRY
 	BEGIN CATCH 

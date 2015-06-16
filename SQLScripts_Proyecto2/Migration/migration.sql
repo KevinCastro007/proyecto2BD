@@ -12,7 +12,7 @@ AS bigint
 	START WITH 1   
 	INCREMENT BY 1  
 	NO MAXVALUE
-
+		
 GO
 CREATE PROCEDURE APSP_MigrateData
 AS
@@ -454,7 +454,7 @@ BEGIN
 				SELECT MM.FK_MachineryRequest, MM.Amount, MM.MovementDate, MM.MovementDescription FROM @MachineryMovement MM
 			INSERT INTO AP_SupplyMovement(FK_SupplyRequest, Amount, MovementDate, MovementDescription)
 				SELECT SM.FK_SupplyRequest, SM.Amount, SM.MovementDate, SM.MovementDescription FROM @SupplyMovement SM
-			UPDATE AP_LotXCycle SET MachineryBalance = LC.MachineryBalance + (SELECT SUM(MM.Amount)
+			UPDATE AP_LotXCycle SET MachineryBalance = LC.MachineryBalance + (SELECT ISNULL(SUM(MM.Amount), 0)
 				FROM AP_MachineryMovement MM
 				inner join AP_MachineryRequest MR ON MR.ID = MM.FK_MachineryRequest
 				inner join AP_Request R ON R.ID = MR.ID

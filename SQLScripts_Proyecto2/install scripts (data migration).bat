@@ -33,5 +33,6 @@ sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Request-Others.sq
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\RequestType.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Service.sql
 sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\StoreProcedures\Supply.sql
+sqlcmd -s localhost -i C:\SQLScripts_Proyecto2\MigrateData.sql
 @echo off
 set /p id=" "

@@ -1,0 +1,58 @@
+
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h4>Esta aplicación pone a su disposición filtros de información del historial de actividades de la Finca.<br>El procesamiento de solicitudes de suministros, maquinaria o servicios.<br></h4>
+                <div ng-show="showLotSelection">
+                    <strong><p><br>Lote:</p></strong>
+                    <select ng-change="lotSelection()" ng-model="access.lot" ng-options="lot.code for lot in lots" style="height: 33px; width: 250px"></select>
+                    <strong><p><br>Ciclo:</p></strong>
+                    <select ng-change="cycleSelection()" ng-model="access.cycle" ng-options="cycle.period for cycle in cycles" style="height: 33px; width: 250px"></select>                    
+                </div>                
+                <div ng-show="showLotInfo">
+                    <h2>{{property}} - {{lot}}</h2>
+                    <h3>Tipo de Cultivo: {{cropType}}.</h3>
+                    <h4>Gastos: {{totalBalance}}</h4>
+                    <ul>
+                        <li>
+                            <h4>Suministros: {{suppliesBalance}}</h4>
+                        </li>
+                        <li>
+                            <h4>Servicios: {{servicesBalance}}</h4>
+                        </li>
+                        <li>
+                            <h4>Maquinaria: {{machineryBalance}}</h4>
+                        </li>
+                    </ul>  
+                    <br><br>
+                    <h4>Última actividad registrada - Solicitud - Costo parcial: {{partialBalance}}</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="success">
+                                <th style="width: 80px">Fecha</th>
+                                <th style="width: 80px">Solicitud</th>
+                                <th style="width: 80px">Estado</th>
+                                <th style="width: 110px">Encargado</th>
+                                <th style="width: 110px">Actividad</th>
+                                <th style="width: 280px">Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{lastRequest.date}}</td>  
+                                <td>{{lastRequest.requestType}}</td> 
+                                <td>{{lastRequest.state}}</td>       
+                                <td>{{lastRequest.attendant}}</td>   
+                                <td>{{lastRequest.activity}}</td>       
+                                <td>{{lastRequest.description}}</td>     
+                            </tr>       
+                        </tbody>
+                    </table>                    
+                    <br><button class="btn btn-info" ng-click="changeLot()">Realizar otra Consulta</button>                  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#page-content-wrapper -->
