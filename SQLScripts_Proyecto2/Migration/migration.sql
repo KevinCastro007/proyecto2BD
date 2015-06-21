@@ -20,7 +20,7 @@ BEGIN
 	BEGIN TRY
 		DECLARE @Doc XML, @MaxRequest INT
 		SELECT @Doc = BulkColumn 
-			FROM OPENROWSET(BULK 'D:\XMLfarm.xml', SINGLE_CLOB) AS xmlDATA
+			FROM OPENROWSET(BULK 'D:\XML2.xml', SINGLE_CLOB) AS xmlDATA
 		DECLARE @Property TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50))
 		DECLARE @CropType TABLE(ID INT IDENTITY(1, 1), Name VARCHAR(50))
 		DECLARE @Cycle TABLE(ID INT IDENTITY(1, 1), StartDate DATE, EndDate DATE)
@@ -152,9 +152,9 @@ BEGIN
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
 		cross apply x3.farm.nodes('./lot') AS x4(lot)
-		
-		INSERT INTO @LotXCycle(FK_Lot, FK_Cycle, FK_CropType, ServicesBalance, SuppliesBalance, MachineryBalance)
-		SELECT
+
+		INSERT INTO @LotXCycle(FK_Lot, FK_Cycle, FK_CropType, ServicesBalance, SuppliesBalance, MachineryBalance)		
+		SELECT 				
 			(SELECT L.ID FROM @Lot L
 				WHERE L.Code = lot.value('@code', 'VARCHAR(50)')),
 			(SELECT C.ID FROM @Cycle C
@@ -173,7 +173,7 @@ BEGIN
 		cross apply x1.company.nodes('./period') AS x2(period)
 		cross apply x2.period.nodes('./farm') AS x3(farm)
 		cross apply x3.farm.nodes('./lot') AS x4(lot)
-
+		
 		ALTER SEQUENCE APSQ_Count
 		RESTART WITH 1;
 		INSERT INTO @Request(FK_LotXCycle, FK_RequestType, FK_Attendant, FK_ActivityType, RequestDescription, RequestState, RequestDate, TransactionDate)
