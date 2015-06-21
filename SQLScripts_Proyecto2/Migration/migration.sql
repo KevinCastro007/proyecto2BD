@@ -14,7 +14,7 @@ AS bigint
 	NO MAXVALUE
 		
 GO
-CREATE PROCEDURE APSP_MigrateData
+ALTER PROCEDURE APSP_MigrateData
 AS
 BEGIN
 	BEGIN TRY
@@ -195,6 +195,7 @@ BEGIN
 				WHERE A.Name = service.value('@requestFrom', 'VARCHAR(50)')),
 			(SELECT AT.ID FROM @ActivityType AT
 				WHERE AT.Name = activity.value('@description', 'VARCHAR(50)')),
+			ISNULL(
 			'COD' + CONVERT(VARCHAR(10), (SELECT LC.ID FROM @LotXCycle LC
 				WHERE LC.FK_Lot = (SELECT L.ID FROM @Lot L
 				WHERE L.Code = lot.value('@code', 'VARCHAR(50)'))
@@ -212,7 +213,14 @@ BEGIN
 				+ CONVERT(VARCHAR(10), 1) 
 				+ CONVERT(VARCHAR(10), (SELECT S.ID FROM @Service S
 				WHERE S.Name = service.value('@name', 'VARCHAR(50)')))  
-				+ '. ' + service.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), service.value('@duration', 'VARCHAR(50)')) + ' hora(s).',				
+				+ '. ' + service.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), service.value('@duration', 'VARCHAR(50)')) + ' hora(s).',
+			'COD' + CONVERT(VARCHAR(10), (SELECT AT.ID FROM @ActivityType AT
+				WHERE AT.Name = activity.value('@description', 'VARCHAR(50)'))) 
+				+ CONVERT(VARCHAR(10), 1) 
+				+ CONVERT(VARCHAR(10), (SELECT S.ID FROM @Service S
+				WHERE S.Name = service.value('@name', 'VARCHAR(50)')))  
+				+ '. ' + service.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), service.value('@duration', 'VARCHAR(50)')) + ' hora(s).'				
+				),
 			service.value('@status', 'VARCHAR(50)'),
 			(SUBSTRING(service.value('@requestDate', 'VARCHAR(10)'), 4, 2) + '/' + 
 				SUBSTRING(service.value('@requestDate', 'VARCHAR(10)'), 0, 3) + '/' + 
@@ -226,6 +234,7 @@ BEGIN
 		cross apply x3.farm.nodes('./lot') AS x4(lot)
 		cross apply x4.lot.nodes('./activity') AS x5(activity)
 		cross apply x5.activity.nodes('./service') AS x6(service)
+
 		INSERT INTO @ServiceRequest(ID, FK_Service, AmountHours, Cost)
 		SELECT 
 			NEXT value FOR APSQ_Count,
@@ -263,6 +272,7 @@ BEGIN
 				WHERE A.Name = machinery.value('@requestFrom', 'VARCHAR(50)')),
 			(SELECT AT.ID FROM @ActivityType AT
 				WHERE AT.Name = activity.value('@description', 'VARCHAR(50)')),
+			ISNULL(
 			'COD' + CONVERT(VARCHAR(10), (SELECT LC.ID FROM @LotXCycle LC
 				WHERE LC.FK_Lot = (SELECT L.ID FROM @Lot L
 				WHERE L.Code = lot.value('@code', 'VARCHAR(50)'))
@@ -281,6 +291,13 @@ BEGIN
 				+ CONVERT(VARCHAR(10), (SELECT M.ID FROM @Machinery M
 				WHERE M.Name = machinery.value('@name', 'VARCHAR(50)')))  
 				+ '. ' + machinery.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), machinery.value('@duration', 'VARCHAR(50)')) + ' hora(s).',
+			'COD' +	CONVERT(VARCHAR(10), (SELECT AT.ID FROM @ActivityType AT
+				WHERE AT.Name = activity.value('@description', 'VARCHAR(50)'))) 
+				+ CONVERT(VARCHAR(10), 2) 
+				+ CONVERT(VARCHAR(10), (SELECT M.ID FROM @Machinery M
+				WHERE M.Name = machinery.value('@name', 'VARCHAR(50)')))  
+				+ '. ' + machinery.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), machinery.value('@duration', 'VARCHAR(50)')) + ' hora(s).'
+				),
 			machinery.value('@status', 'VARCHAR(50)'),
 			(SUBSTRING(machinery.value('@requestDate', 'VARCHAR(10)'), 4, 2) + '/' + 
 				SUBSTRING(machinery.value('@requestDate', 'VARCHAR(10)'), 0, 3) + '/' + 
@@ -331,6 +348,7 @@ BEGIN
 				WHERE A.Name = supply.value('@requestFrom', 'VARCHAR(50)')),
 			(SELECT AT.ID FROM @ActivityType AT
 				WHERE AT.Name = activity.value('@description', 'VARCHAR(50)')),
+			ISNULL(
 			'COD' + CONVERT(VARCHAR(10), (SELECT LC.ID FROM @LotXCycle LC
 				WHERE LC.FK_Lot = (SELECT L.ID FROM @Lot L
 				WHERE L.Code = lot.value('@code', 'VARCHAR(50)'))
@@ -348,7 +366,14 @@ BEGIN
 				+ CONVERT(VARCHAR(10), 3) 
 				+ CONVERT(VARCHAR(10), (SELECT S.ID FROM @Supply S
 				WHERE S.Name = supply.value('@name', 'VARCHAR(50)')))  
-				+ '. ' + supply.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), supply.value('@units', 'VARCHAR(50)')) + '.',
+				+ '. ' + supply.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), supply.value('@units', 'VARCHAR(50)')) + '.',			
+			'COD' + CONVERT(VARCHAR(10), (SELECT AT.ID FROM @ActivityType AT
+				WHERE AT.Name = activity.value('@description', 'VARCHAR(50)'))) 
+				+ CONVERT(VARCHAR(10), 3) 
+				+ CONVERT(VARCHAR(10), (SELECT S.ID FROM @Supply S
+				WHERE S.Name = supply.value('@name', 'VARCHAR(50)')))  
+				+ '. ' + supply.value('@name', 'VARCHAR(50)') + ', cantidad: ' + CONVERT(VARCHAR(50), supply.value('@units', 'VARCHAR(50)')) + '.'
+				),
 			supply.value('@status', 'VARCHAR(50)'),
 			(SUBSTRING(supply.value('@requestDate', 'VARCHAR(10)'), 4, 2) + '/' + 
 				SUBSTRING(supply.value('@requestDate', 'VARCHAR(10)'), 0, 3) + '/' + 
